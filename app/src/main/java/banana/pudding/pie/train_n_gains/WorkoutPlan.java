@@ -6,7 +6,7 @@ public class WorkoutPlan {
     private String name;
     private String description;
 
-    ArrayList<Integer> workouts;
+    ArrayList<WorkoutAction> workouts;
 
     public WorkoutPlan(){
         this("None","None");
@@ -18,7 +18,7 @@ public class WorkoutPlan {
     }
 
 
-    public void addWorkout(int workout){
+    public void addWorkout(WorkoutAction workout){
         workouts.add(workout);
     }
     public void removeWorkout(int index){
@@ -26,16 +26,16 @@ public class WorkoutPlan {
     }
 
     public void moveUp(int index){
-        int val=workouts.remove(index);
+        WorkoutAction val=workouts.remove(index);
         workouts.add(index-1,val);
     }
 
     public void moveDown(int index){
-        int val=workouts.remove(index);
+        WorkoutAction val=workouts.remove(index);
         workouts.add(index+1,val);
     }
 
-    public ArrayList<Integer> getWorkouts() {
+    public ArrayList<WorkoutAction> getWorkouts() {
         return workouts;
     }
 

@@ -4,6 +4,10 @@ import android.media.Image;
 
 public class WorkoutAction {
 
+
+    public static WorkoutAction PUSHUPS=new WorkoutAction("Push-ups","do push-ups","plank then lift yourself",TYPE.ARMS);
+
+
     public enum TYPE{
         ARMS,
         LEGS,
