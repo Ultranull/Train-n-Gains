@@ -25,7 +25,8 @@ public class MainActivity extends AppCompatActivity {
 
     private MCalendarView calender;
     private TextView datetitle,monthtitle;
-    private MarkStyle selected;
+    private MarkStyle selected, planned;
+    private DateData lastday;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,6 +39,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         selected=new MarkStyle(MarkStyle.BACKGROUND,Color.CYAN);
+        planned=new MarkStyle(MarkStyle.DOT,Color.GREEN);
 
         calender=findViewById(R.id.CV);
         datetitle=findViewById(R.id.day_title);
@@ -54,27 +56,6 @@ public class MainActivity extends AppCompatActivity {
         monthtitle.setText(WorkoutSchedule.getMonthForInt(today.getMonth())+" : "+today.getYear());
 
         WorkoutSchedule wos=WorkoutSchedule.getInstance();
-        WorkoutPlan wop=new WorkoutPlan();
-        wop.addWorkout(WorkoutAction.PUSHUPS);
-        wop.addWorkout(WorkoutAction.PUSHUPS);
-        wop.addWorkout(WorkoutAction.PUSHUPS);
-        wop.addWorkout(WorkoutAction.PUSHUPS);
-        wop.addWorkout(WorkoutAction.PUSHUPS);
-        wop.addWorkout(WorkoutAction.PUSHUPS);
-        wop.addWorkout(WorkoutAction.PUSHUPS);
-        wop.addWorkout(WorkoutAction.PUSHUPS);
-        wop.addWorkout(WorkoutAction.PUSHUPS);
-        wop.addWorkout(WorkoutAction.PUSHUPS);
-        wop.addWorkout(WorkoutAction.PUSHUPS);
-        wop.addWorkout(WorkoutAction.PUSHUPS);
-        wop.addWorkout(WorkoutAction.PUSHUPS);
-        wop.addWorkout(WorkoutAction.PUSHUPS);
-        wop.addWorkout(WorkoutAction.PUSHUPS);
-        wop.addWorkout(WorkoutAction.PUSHUPS);
-        wop.addWorkout(WorkoutAction.PUSHUPS);
-        wos.addWorkoutPlan(WorkoutSchedule.today(),wop);
-
-
         WorkoutPlan fortoday=wos.getAt(today);
         if(fortoday!=null) {
             DayWorkoutList dwl=new DayWorkoutList();
@@ -86,8 +67,10 @@ public class MainActivity extends AppCompatActivity {
             fragmentTransaction.commit();
         }
 
+        lastday=today;
 
-
+        for(DateData d:wos.dates)
+            calender.markDate(d.setMarkStyle(planned));
     }
 
     private class DayListener extends OnDateClickListener{
@@ -100,12 +83,17 @@ public class MainActivity extends AppCompatActivity {
                 if (s.getColor()==selected.getColor()&&s.getStyle()==selected.getStyle())
                     calender.unMarkDate(marked.get(i));
             }
-            calender.markDate(date.setMarkStyle(selected));
 
-            if(date.equals(WorkoutSchedule.today()))
+            if(!calender.getMarkedDates().getAll().contains(date)) {
+                calender.markDate(date.setMarkStyle(selected));
+            }
+
+            if(date.equals(WorkoutSchedule.today())) {
                 datetitle.setText("Today");
-            else
+            }
+            else {
                 datetitle.setText(WorkoutSchedule.getMonthForInt(date.getMonth()) + "/" + date.getDay() + ":");
+            }
 
             FragmentManager fragmentManager = getSupportFragmentManager();
             FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
@@ -117,10 +105,35 @@ public class MainActivity extends AppCompatActivity {
                 fragmentTransaction.replace(R.id.frameLayout, dwl);
                 fragmentTransaction.commit();
             }else{
-                fragmentTransaction.replace(R.id.frameLayout, new DayWorkoutEmpty());
+                DayWorkoutEmpty dwe=new DayWorkoutEmpty();
+                dwe.date=date;
+                fragmentTransaction.replace(R.id.frameLayout, dwe);
                 fragmentTransaction.commit();
             }
+            lastday=date;
         }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        WorkoutSchedule wos=WorkoutSchedule.getInstance();
+        WorkoutPlan fortoday=wos.getAt(lastday);
+        if(fortoday!=null) {
+            DayWorkoutList dwl=new DayWorkoutList();
+            dwl.setPlan(fortoday);
+            fragmentTransaction.replace(R.id.frameLayout, dwl);
+            fragmentTransaction.commit();
+        }else{
+            DayWorkoutEmpty dwe=new DayWorkoutEmpty();
+            dwe.date=lastday;
+            fragmentTransaction.replace(R.id.frameLayout, dwe);
+            fragmentTransaction.commit();
+        }
+        for(DateData d:wos.dates)
+            calender.markDate(d.setMarkStyle(planned));
     }
 
     private class MonthListener extends OnMonthChangeListener {

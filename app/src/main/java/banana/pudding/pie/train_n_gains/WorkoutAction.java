@@ -5,8 +5,6 @@ import android.media.Image;
 public class WorkoutAction {
 
 
-    public static WorkoutAction PUSHUPS=new WorkoutAction("Push-ups","do push-ups","plank then lift yourself",TYPE.ARMS);
-
 
     public enum TYPE{
         ARMS,
@@ -15,6 +13,7 @@ public class WorkoutAction {
         BACK
     }
 
+    private int id;
     private String name;
     private String description;
     private String instructions;
@@ -23,10 +22,11 @@ public class WorkoutAction {
     private Image image;
 
     public WorkoutAction(){
-        this("None","None","None",TYPE.CORE);
+        this(-1,"None","None","None",TYPE.CORE);
     }
 
-    public WorkoutAction(String name,String description,String instructions,TYPE type){
+    public WorkoutAction(int id,String name,String description,String instructions,TYPE type){
+        this.id=id;
         this.name=name;
         this.description=description;
         this.instructions=instructions;
@@ -64,6 +64,14 @@ public class WorkoutAction {
 
     public void setType(TYPE type) {
         this.type = type;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public Image getImage() {

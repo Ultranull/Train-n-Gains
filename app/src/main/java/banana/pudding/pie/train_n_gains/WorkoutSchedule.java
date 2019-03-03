@@ -39,10 +39,12 @@ public class WorkoutSchedule {
 
     public ArrayList<DateData> dates;
     public ArrayList<WorkoutPlan> plans;
+public ActionManager actionManager;
 
     public WorkoutSchedule(){
         dates=new ArrayList<>();
         plans=new ArrayList<>();
+        actionManager=new ActionManager();
     }
 
     public void addWorkoutPlan(DateData dd,WorkoutPlan wop){

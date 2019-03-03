@@ -11,11 +11,16 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
+import sun.bob.mcalendarview.vo.DateData;
+
 
 /**
  * A simple {@link Fragment} subclass.
  */
 public class DayWorkoutEmpty extends Fragment {
+
+
+    public DateData date;
 
 
     public DayWorkoutEmpty() {
@@ -32,11 +37,15 @@ public class DayWorkoutEmpty extends Fragment {
             @Override
             public void onClick(View v) {
                 Intent intent=new Intent(getContext(),NewWorkout.class);
+                intent.putExtra("day",date.getDay());
+                intent.putExtra("month",date.getMonth());
+                intent.putExtra("year",date.getYear());
                 startActivity(intent);
             }
         });
 
     }
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
