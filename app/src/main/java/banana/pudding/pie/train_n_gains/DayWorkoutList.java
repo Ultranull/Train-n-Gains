@@ -49,34 +49,18 @@ public class DayWorkoutList extends Fragment {
         wop=wp;
     }
 
-    private class Adapter extends ArrayAdapter<WorkoutAction> implements CheckBox.OnCheckedChangeListener{
+    private class Adapter extends ArrayAdapter<WorkoutAction>{
 
         private final int resource;
-        private ArrayList<Boolean> checkstates;
         private List<WorkoutAction> objects;
 
         public Adapter(@NonNull Context context, int resource, @NonNull List<WorkoutAction> objects) {
             super(context, resource, objects);
             this.resource=resource;
-            this.checkstates=new ArrayList<>();
-            for(int i=0;i<objects.size();i++)
-
             this.objects=objects;
         }
 
-        public ArrayList<WorkoutAction> isChecked(){
-            ArrayList<WorkoutAction> checked=new ArrayList<>();
-            for(int i=0;i<checkstates.size();i++){
-                if(checkstates.get(i))
-                    checked.add(objects.get(i));
-            }
-            return checked;
-        }
 
-        @Override
-        public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-            checkstates.set((Integer) buttonView.getTag(),isChecked);
-        }
 
         @NonNull
         @Override
@@ -87,22 +71,17 @@ public class DayWorkoutList extends Fragment {
                 holder=new Holder();
                 holder.title = convertView.findViewById(R.id.plan_list_workout_title);
                 holder.progress=convertView.findViewById(R.id.plan_list_workout_progress);
-                holder.cb = convertView.findViewById(R.id.plan_list_workout_done);
-                holder.cb.setOnCheckedChangeListener(this);
                 convertView.setTag(holder);
             }else{
                 holder=(Holder)convertView.getTag();
             }
             holder.title.setText(position+". "+objects.get(position).getName());
-            holder.cb.setChecked(checkstates.get(position));
-            holder.cb.setTag(position);
 
             return convertView;
         }
 
         private class Holder {
             public TextView title,progress;
-            public CheckBox cb;
         }
     }
 
