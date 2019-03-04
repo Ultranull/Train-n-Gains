@@ -60,7 +60,7 @@ public class NewWorkout extends AppCompatActivity implements View.OnClickListene
         adapter=new Adapter(this,R.layout.new_workout_actions_list_item,wop.getWorkouts(),this);
         activities.setAdapter(adapter);
 
-        wop.addWorkout(new WorkoutAction(0,"poop","poop","",WorkoutAction.TYPE.ARMS));
+        wop.addWorkout(new WorkoutAction(0,"sample","sample","",WorkoutAction.TYPE.ARMS));
     }
 
     @Override

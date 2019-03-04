@@ -14,7 +14,7 @@ public class ActionManager {
 
     public ActionManager(){
         actions=new LinkedHashMap<>();
-        actions.put(1,new WorkoutAction(1,"push-ups","poop","dance", WorkoutAction.TYPE.ARMS));
+        actions.put(1,new WorkoutAction(1,"push-ups","sample","dance", WorkoutAction.TYPE.ARMS));
         actions.put(2,new WorkoutAction(2,"sit-ups","foobar","dance", WorkoutAction.TYPE.CORE));
         actions.put(3,new WorkoutAction(3,"arm-curls","fizzbuzz","dance", WorkoutAction.TYPE.ARMS));
     }
