@@ -14,8 +14,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String TABLE_NAME = "TABLENAME";
     public static final String COL1 = "ID";
     public static final String COL2 = "WORKOUT_NAME";
-    public static final String COL3 = "REPETITIONS";
-    public static final String COL4 = "SETS";
+    public static final String COL3 = "DESCRIPTION";
 
     public DatabaseHelper(Context context){super(context, DATABASE_NAME, null, 1);}
 
@@ -35,12 +34,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
 
 
-    public boolean addData(String workout_name, String reps, String sets) {
+    public boolean addData(String workout_name, String des) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
         contentValues.put(COL2, workout_name);
-        contentValues.put(COL3, reps);
-        contentValues.put(COL4, sets);
+        contentValues.put(COL3, des);
 
         long result = db.insert(TABLE_NAME, null, contentValues);
 
@@ -70,9 +68,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         }
     }
 
-    public boolean deleteReps(String reps) {
+    public boolean deleteDes(String reps) {
         SQLiteDatabase db = this.getWritableDatabase();
-        long result =  db.delete(TABLE_NAME, "REPETITIONS = ?", new String[] {reps});
+        long result =  db.delete(TABLE_NAME, "DESCRIPTION = ?", new String[] {reps});
 
         if (result == -1) {
             return false;
@@ -80,18 +78,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             return true;
         }
     }
-
-    public boolean deleteSets(String sets) {
-        SQLiteDatabase db = this.getWritableDatabase();
-        long result =  db.delete(TABLE_NAME, "SETS = ?", new String[] {sets});
-
-        if (result == -1) {
-            return false;
-        } else {
-            return true;
-        }
-    }
-
 
 
     public Cursor viewData() {

@@ -32,6 +32,7 @@ public class NewWorkout extends AppCompatActivity implements View.OnClickListene
 
     private WorkoutPlan wop;
     private DateData day;
+    private DatabaseHelper myDB;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -149,6 +150,17 @@ public class NewWorkout extends AppCompatActivity implements View.OnClickListene
         private class Holder {
             public TextView title;
             public Button up,down,delete;
+        }
+    }
+
+    public void AddDataTomyDB(String name, String description) {
+        boolean insertData = myDB.addData(name, description);
+
+        if(insertData == true) {
+            Toast.makeText(this, "Successfully Entered Workout Information!", Toast.LENGTH_LONG).show();
+        }
+        else {
+            Toast.makeText(this, "Something Went Wrong :(", Toast.LENGTH_LONG).show();
         }
     }
 }
