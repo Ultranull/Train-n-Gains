@@ -1,5 +1,7 @@
 package banana.pudding.pie.train_n_gains;
 
+import org.json.JSONArray;
+
 import java.util.ArrayList;
 
 public class WorkoutPlan {
@@ -16,7 +18,23 @@ public class WorkoutPlan {
         this.description=description;
         workouts=new ArrayList<>();
     }
-
+    public WorkoutPlan(JSONArray jsonArray){
+        this();
+        try{
+            for (int i = 0; i < jsonArray.length(); i++) {
+                workouts.add(new WorkoutAction(jsonArray.getJSONObject(i)));
+            }
+        }catch(Exception e){e.printStackTrace();}
+    }
+    public JSONArray toJSON(){
+        JSONArray jsonArray=new JSONArray();
+        try{
+            for (int i = 0; i < workouts.size(); i++) {
+                jsonArray.put(workouts.get(i).toJSON());
+            }
+        }catch(Exception e){e.printStackTrace();}
+        return jsonArray;
+    }
 
     public void addWorkout(WorkoutAction workout){
         workouts.add(workout);

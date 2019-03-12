@@ -26,7 +26,6 @@ import sun.bob.mcalendarview.vo.DateData;
 public class NewWorkout extends AppCompatActivity implements View.OnClickListener {
 
     private Button add,addActivity;
-    private EditText name,descr;
     private ListView activities;
     private Adapter adapter;
 
@@ -53,8 +52,6 @@ public class NewWorkout extends AppCompatActivity implements View.OnClickListene
         registerForContextMenu(addActivity);
 
         addActivity=findViewById(R.id.new_workout_add_action_button);
-        name=findViewById(R.id.new_workout_name);
-        descr=findViewById(R.id.new_workout_descr);
 
         activities=findViewById(R.id.workout_action_list);
         wop=new WorkoutPlan();
@@ -153,14 +150,4 @@ public class NewWorkout extends AppCompatActivity implements View.OnClickListene
         }
     }
 
-    public void AddDataTomyDB(String name, String description) {
-        boolean insertData = myDB.addData(name, description);
-
-        if(insertData == true) {
-            Toast.makeText(this, "Successfully Entered Workout Information!", Toast.LENGTH_LONG).show();
-        }
-        else {
-            Toast.makeText(this, "Something Went Wrong :(", Toast.LENGTH_LONG).show();
-        }
-    }
 }

@@ -80,10 +80,8 @@ public class WorkoutTest {
 
         System.out.println(getMonthForInt(month-1)+"/"+day+"/"+year);
 
-        MarkStyle mk0=new MarkStyle(MarkStyle.BACKGROUND, Color.CYAN);
-        MarkStyle mk1=new MarkStyle(MarkStyle.BACKGROUND, Color.CYAN);
-
-        System.out.println(mk0.equals(mk1));
+        DateData dd=new DateData(2019,2,12);
+        System.out.println(dd.toString());
     }
     String getMonthForInt(int num) {
         String month = "wrong";

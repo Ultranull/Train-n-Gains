@@ -1,6 +1,10 @@
 package banana.pudding.pie.train_n_gains;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.LinkedHashMap;
 
 public class ActionManager {
@@ -26,8 +30,27 @@ public class ActionManager {
         return actions.get(id);
     }
 
-    public void load(String file){}
-    public void save(String file){}
+    public void load(String contents){
+        try {
+            JSONArray jsonArray = new JSONArray(contents);
+            for (int i=0;i<jsonArray.length();i++){
+                JSONObject obj=jsonArray.getJSONObject(i);
+                int id=obj.getInt("id");
+                actions.put(id,new WorkoutAction(obj));
+            }
+        }catch (Exception e){e.printStackTrace();}
+    }
+    public String save(){
+        JSONArray jsonArray = new JSONArray();
+        Iterator<WorkoutAction> iter=actions.values().iterator();
+        try {
+            while (iter.hasNext()){
+                JSONObject obj=iter.next().toJSON();
+                jsonArray.put(obj);
+            }
+        }catch (Exception e){e.printStackTrace();}
+        return jsonArray.toString();
+    }
 
 
 }
