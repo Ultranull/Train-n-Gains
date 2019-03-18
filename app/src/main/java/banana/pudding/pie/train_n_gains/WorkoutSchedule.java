@@ -87,7 +87,6 @@ public class WorkoutSchedule {
             }
         } else System.out.println("no file");
     }
-
     public void loadSchedule(Context context){
         File directory = context.getFilesDir();
         File file = new File(directory, "userPlan.json");
