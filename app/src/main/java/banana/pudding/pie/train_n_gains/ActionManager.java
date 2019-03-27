@@ -18,9 +18,13 @@ public class ActionManager {
 
     public ActionManager(){
         actions=new LinkedHashMap<>();
-        actions.put(1,new WorkoutAction(1,"push-ups","sample","dance", WorkoutAction.TYPE.ARMS));
-        actions.put(2,new WorkoutAction(2,"sit-ups","foobar","dance", WorkoutAction.TYPE.CORE));
-        actions.put(3,new WorkoutAction(3,"arm-curls","fizzbuzz","dance", WorkoutAction.TYPE.ARMS));
+        actions.put(1,new WorkoutAction(1,"Push-Ups","sample","dance", WorkoutAction.TYPE.ARMS));
+        actions.put(2,new WorkoutAction(2,"Sit-Ups","foobar","dance", WorkoutAction.TYPE.CORE));
+        actions.put(3,new WorkoutAction(3,"Arm-Curls","fizzbuzz","dance", WorkoutAction.TYPE.ARMS));
+        actions.put(4,new WorkoutAction(4,"Squats","fizzbuzz","dance", WorkoutAction.TYPE.LEGS));
+        actions.put(5,new WorkoutAction(5,"Pull-Ups","fizzbuzz","dance", WorkoutAction.TYPE.BACK));
+
+
     }
     public ArrayList<WorkoutAction> getActions(){
         return new ArrayList<>(actions.values());
