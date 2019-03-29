@@ -3,10 +3,13 @@ package banana.pudding.pie.train_n_gains;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -30,6 +33,8 @@ public class DayWorkoutList extends Fragment {
     private ListView workoutList;
     private Adapter adapter;
     private Button startWorkoutButton;
+    private DatabaseHelper myDB;
+    ArrayAdapter listAdapter;
 
     public DayWorkoutList() {
         // Required empty public constructor
@@ -50,10 +55,21 @@ public class DayWorkoutList extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        myDB = new DatabaseHelper(getContext());
+        final Cursor data = myDB.getListContents();
+        final ArrayList<String> theList = new ArrayList<>();
+
         workoutList=view.findViewById(R.id.day_workout_list);
         startWorkoutButton=view.findViewById(R.id.startWorkout);
-        adapter=new Adapter(getContext(),R.layout.plan_list_item,wop.getWorkouts());
-        workoutList.setAdapter(adapter);
+
+        {
+            while(data.moveToNext()){
+                theList.add(data.getString(1));
+                adapter=new Adapter(getContext(),R.layout.plan_list_item, theList);
+                workoutList.setAdapter(adapter);
+            }
+        }
+
 
     }
 
@@ -62,12 +78,12 @@ public class DayWorkoutList extends Fragment {
         wop=wp;
     }
 
-    private class Adapter extends ArrayAdapter<WorkoutAction>{
+    private class Adapter extends ArrayAdapter<String>{
 
         private final int resource;
-        private List<WorkoutAction> objects;
+        private List<String> objects;
 
-        public Adapter(@NonNull Context context, int resource, @NonNull List<WorkoutAction> objects) {
+        public Adapter(@NonNull Context context, int resource, @NonNull List<String> objects) {
             super(context, resource, objects);
             this.resource=resource;
             this.objects=objects;
@@ -88,32 +104,19 @@ public class DayWorkoutList extends Fragment {
             }else{
                 holder=(Holder)convertView.getTag();
             }
-            holder.title.setText(position+". "+objects.get(position).getName());
+            holder.title.setText(position+1+". "+objects.get(position).toString());
 
-            //FOR CLICKING LISTVIEW. KEEPING JUST IN CASE
-            /*workoutList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                @Override
-                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                    Intent intent = new Intent(getActivity(), ActiveWorkout.class);
-                    String wName = objects.get(position).getName();
-                    intent.putExtra("WorkoutName", wName);
-                    startActivity(intent);
-                }
-            });*/
 
             startWorkoutButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     Intent intent = new Intent(getActivity(), ActiveWorkout.class);
-                    String wName = objects.get(0).getName();
+                    String wName = objects.get(0).toString();
                     intent.putExtra("WorkoutName", wName);
                     startActivity(intent);
 
                 }
             });
-
-
-
 
 
 

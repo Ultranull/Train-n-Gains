@@ -37,6 +37,7 @@ public class NewWorkout extends AppCompatActivity implements View.OnClickListene
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_workout);
+        myDB = new DatabaseHelper(this);
 
         Intent intent=getIntent();
         day=new DateData(
@@ -58,6 +59,7 @@ public class NewWorkout extends AppCompatActivity implements View.OnClickListene
         adapter=new Adapter(this,R.layout.new_workout_actions_list_item,wop.getWorkouts(),this);
         activities.setAdapter(adapter);
 
+
         //wop.addWorkout(new WorkoutAction(0,"sample","sample","",WorkoutAction.TYPE.ARMS));
     }
 
@@ -75,6 +77,8 @@ public class NewWorkout extends AppCompatActivity implements View.OnClickListene
     public boolean onContextItemSelected(MenuItem item) {
         ActionManager am=WorkoutSchedule.getInstance().actionManager;
         wop.addWorkout(am.getAction(item.getItemId()));
+        //AddData(am.getAction(item.getItemId()).getName(), am.getAction(item.getItemId()).getDescription(), am.getAction(item.getItemId()).getInstructions());
+        AddData(am.getAction(item.getItemId()));
         adapter.notifyDataSetChanged();
         return super.onContextItemSelected(item);
     }
@@ -149,5 +153,20 @@ public class NewWorkout extends AppCompatActivity implements View.OnClickListene
             public Button up,down,delete;
         }
     }
+
+
+    public void AddData(WorkoutAction a)
+    {
+        boolean insertData = myDB.addData(a);
+
+        if(insertData ==true){
+            Toast.makeText(this, "Successfully Entered Workout Information!", Toast.LENGTH_LONG).show();
+        }
+        else{
+            Toast.makeText(this, "You Can Only Enter 1 of the Same Workout!", Toast.LENGTH_LONG).show();
+        }
+    }
+
+
 
 }

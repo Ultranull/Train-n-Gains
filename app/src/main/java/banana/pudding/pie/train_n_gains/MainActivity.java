@@ -1,6 +1,8 @@
 package banana.pudding.pie.train_n_gains;
 
 import android.annotation.SuppressLint;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -22,6 +24,8 @@ import sun.bob.mcalendarview.listeners.OnMonthChangeListener;
 import sun.bob.mcalendarview.vo.DateData;
 import sun.bob.mcalendarview.vo.MarkedDates;
 
+import static banana.pudding.pie.train_n_gains.DatabaseHelper.TABLE_NAME;
+
 public class MainActivity extends AppCompatActivity {
 
     private MCalendarView calender;
@@ -29,6 +33,9 @@ public class MainActivity extends AppCompatActivity {
     private Button totoday;
     private MarkStyle selected, planned;
     private DateData lastday;
+    private DatabaseHelper myDB;
+    private Cursor data;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,6 +46,10 @@ public class MainActivity extends AppCompatActivity {
             e.printStackTrace();
         }
         setContentView(R.layout.activity_main);
+
+        myDB = new DatabaseHelper(this);
+        data = myDB.getListContents();
+
 
         selected=new MarkStyle(MarkStyle.BACKGROUND,Color.CYAN);
         planned=new MarkStyle(MarkStyle.DOT,Color.GREEN);
@@ -79,6 +90,7 @@ public class MainActivity extends AppCompatActivity {
         }
 
         lastday=today;
+
 
         for(DateData d:wos.dates)
             calender.markDate(d.setMarkStyle(planned));
@@ -132,7 +144,9 @@ public class MainActivity extends AppCompatActivity {
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         WorkoutSchedule wos=WorkoutSchedule.getInstance();
         WorkoutPlan fortoday=wos.getAt(lastday);
-        if(fortoday!=null) {
+
+
+        if(fortoday!=null || data.getCount() != 0) {
             DayWorkoutList dwl=new DayWorkoutList();
             dwl.setPlan(fortoday);
             fragmentTransaction.replace(R.id.frameLayout, dwl);
@@ -179,4 +193,7 @@ public class MainActivity extends AppCompatActivity {
             cv.markDate(dates.get(i));
         }
     }
+
+
+
 }

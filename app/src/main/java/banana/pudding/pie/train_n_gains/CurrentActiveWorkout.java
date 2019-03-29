@@ -7,6 +7,8 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,10 +19,10 @@ import android.widget.TextView;
 
 public class CurrentActiveWorkout extends Fragment {
 
-    TextView workoutName, workoutInsructions, workoutDescription;
-    Button completeWorkout;
-    String name, ins, des;
-    WorkoutPlan currentPlan;
+    private TextView workoutName, workoutInsructions, workoutDescription;
+    private Button completeWorkout;
+    private String name, ins, des;
+    private WorkoutPlan currentPlan;
 
     public CurrentActiveWorkout() {
         // Required empty public constructor
@@ -39,9 +41,14 @@ public class CurrentActiveWorkout extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        workoutName = view.findViewById(R.id.workoutTitle);
-        name = getActivity().getIntent().getExtras().getString("WorkoutName");
-        workoutName.setText(name);
+        //workoutName = view.findViewById(R.id.workoutTitle);
+        //name = getActivity().getIntent().getExtras().getString("WorkoutName");
+        //workoutName.setText(name);
+
+
+
+
+
 
 
     }
