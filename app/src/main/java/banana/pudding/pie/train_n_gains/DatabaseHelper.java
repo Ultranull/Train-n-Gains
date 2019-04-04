@@ -16,13 +16,17 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String COL_DESC = "DESCRIPTION";
     public static final String COL_INST = "INSTRUCTION";
     public static final String COL_TYPE = "TYPE";
+    public static final String COL_DAY = "DAY";
+    public static final String COL_MONTH = "MONTH";
+
+
 
     public DatabaseHelper(Context context){super(context, DATABASE_NAME, null, 1);}
 
     @Override
     public void onCreate (SQLiteDatabase db) {
         String createTable = "CREATE TABLE " + TABLE_NAME + " (ID INTEGER PRIMARY KEY AUTOINCREMENT, " +
-                " NAME TEXT, DESCRIPTION TEXT, INSTRUCTION TEXT, TYPE TEXT)";
+                " NAME TEXT, DESCRIPTION TEXT, INSTRUCTION TEXT, TYPE TEXT, DAY TEXT, MONTH TEXT)";
         db.execSQL(createTable);
     }
 
@@ -35,7 +39,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
 
 
-    public boolean addData(WorkoutAction woa) {
+    public boolean addData(WorkoutAction woa, String day, String month) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
         contentValues.put(ID, woa.getId());
@@ -43,6 +47,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         contentValues.put(COL_DESC, woa.getDescription());
         contentValues.put(COL_INST, woa.getInstructions());
         contentValues.put(COL_TYPE, woa.getType().ordinal());
+        contentValues.put(COL_DAY, day);
+        contentValues.put(COL_MONTH, month);
+
 
         long result = db.insert(TABLE_NAME, null, contentValues);
         //return result!=-1;

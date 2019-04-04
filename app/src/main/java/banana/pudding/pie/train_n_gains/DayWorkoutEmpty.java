@@ -32,6 +32,10 @@ public class DayWorkoutEmpty extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        //final String dayValue = getArguments().getString("WorkoutDay");
+        //final String monthValue = getArguments().getString("WorkoutMonth");
+
+
         Button add=view.findViewById(R.id.add_plan_button);
         add.setOnClickListener(new View.OnClickListener() {
             @Override

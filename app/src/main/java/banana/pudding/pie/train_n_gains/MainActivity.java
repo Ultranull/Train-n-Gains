@@ -1,9 +1,12 @@
 package banana.pudding.pie.train_n_gains;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
+import android.preference.PreferenceManager;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
@@ -13,6 +16,7 @@ import android.widget.Button;
 import android.widget.CalendarView;
 import android.widget.TextView;
 
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -35,6 +39,13 @@ public class MainActivity extends AppCompatActivity {
     private DateData lastday;
     private DatabaseHelper myDB;
     private Cursor data;
+    private SharedPreferences prefs;
+    private SharedPreferences.Editor editor;
+    private String dayValue;
+    private String monthValue;
+    private String dValue;
+    private String mValue;
+    private String temp;
 
 
     @Override
@@ -50,7 +61,6 @@ public class MainActivity extends AppCompatActivity {
         myDB = new DatabaseHelper(this);
         data = myDB.getListContents();
 
-
         selected=new MarkStyle(MarkStyle.BACKGROUND,Color.CYAN);
         planned=new MarkStyle(MarkStyle.DOT,Color.GREEN);
 
@@ -61,7 +71,6 @@ public class MainActivity extends AppCompatActivity {
         calender.setOnMonthChangeListener(new MonthListener());
         calender.setOnDateClickListener(new DayListener());
         //calender.hasTitle(false);
-
 
         totoday=findViewById(R.id.move_to_today);
         totoday.setOnClickListener(new View.OnClickListener() {
@@ -82,10 +91,19 @@ public class MainActivity extends AppCompatActivity {
         if(fortoday!=null) {
             DayWorkoutList dwl=new DayWorkoutList();
             dwl.setPlan(fortoday);
+
+            Bundle bundle = new Bundle();
+            bundle.putString("WorkoutDay", "");
+            bundle.putString("WorkoutMonth", "");
+            dwl.setArguments(bundle);
+            getFragmentManager().beginTransaction();
+
             fragmentTransaction.add(R.id.frameLayout, dwl);
             fragmentTransaction.commit();
         }else{
-            fragmentTransaction.add(R.id.frameLayout, new DayWorkoutEmpty());
+            DayWorkoutEmpty dwe=new DayWorkoutEmpty();
+            dwe.date=today;
+            fragmentTransaction.add(R.id.frameLayout, dwe);
             fragmentTransaction.commit();
         }
 
@@ -94,6 +112,10 @@ public class MainActivity extends AppCompatActivity {
 
         for(DateData d:wos.dates)
             calender.markDate(d.setMarkStyle(planned));
+
+
+        prefs = PreferenceManager.getDefaultSharedPreferences(this);
+        editor = prefs.edit();
     }
 
     private class DayListener extends OnDateClickListener{
@@ -122,14 +144,31 @@ public class MainActivity extends AppCompatActivity {
             FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
             WorkoutSchedule wos=WorkoutSchedule.getInstance();
             WorkoutPlan fortoday=wos.getAt(date);
-            if(fortoday!=null) {
+
+            dayValue = date.getDayString();
+            monthValue = date.getMonthString();
+
+
+            if(fortoday!=null || data.getCount() != 0) {
                 DayWorkoutList dwl=new DayWorkoutList();
                 dwl.setPlan(fortoday);
+                dwl.newDate=lastday;
+
+                Bundle bundle = new Bundle();
+                bundle.putString("WorkoutDay", lastday.getDayString());
+                bundle.putString("WorkoutMonth", lastday.getMonthString());
+                dwl.setArguments(bundle);
+                getFragmentManager().beginTransaction();
+
                 fragmentTransaction.replace(R.id.frameLayout, dwl);
                 fragmentTransaction.commit();
             }else{
                 DayWorkoutEmpty dwe=new DayWorkoutEmpty();
                 dwe.date=date;
+
+                editor.putString("wDay", date.getDayString());
+                editor.putString("wMonth", date.getMonthString());
+
                 fragmentTransaction.replace(R.id.frameLayout, dwe);
                 fragmentTransaction.commit();
             }
@@ -144,11 +183,18 @@ public class MainActivity extends AppCompatActivity {
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         WorkoutSchedule wos=WorkoutSchedule.getInstance();
         WorkoutPlan fortoday=wos.getAt(lastday);
-
+        data.moveToFirst();
 
         if(fortoday!=null || data.getCount() != 0) {
             DayWorkoutList dwl=new DayWorkoutList();
             dwl.setPlan(fortoday);
+
+            Bundle bundle = new Bundle();
+            bundle.putString("WorkoutDay", lastday.getDayString());
+            bundle.putString("WorkoutMonth", lastday.getMonthString());
+            dwl.setArguments(bundle);
+            getFragmentManager().beginTransaction();
+
             fragmentTransaction.replace(R.id.frameLayout, dwl);
             fragmentTransaction.commit();
         }else{

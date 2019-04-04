@@ -2,6 +2,7 @@ package banana.pudding.pie.train_n_gains;
 
 import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentManager;
@@ -22,10 +23,13 @@ import android.widget.Toast;
 
 public class ActiveWorkout extends AppCompatActivity {
 
-    TextView workoutName, workoutInsructions, workoutDescription;
-    Button completeWorkout;
-    String name, ins, des;
-    WorkoutPlan currentPlan;
+    private TextView workoutName, workoutInsructions, workoutDescription;
+    private Button completeWorkout;
+    private String name, ins, des;
+    private WorkoutPlan currentPlan;
+    private DatabaseHelper myDB;
+    private Cursor data;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,6 +40,9 @@ public class ActiveWorkout extends AppCompatActivity {
             e.printStackTrace();
         }
         setContentView(R.layout.active_workout);
+
+        myDB = new DatabaseHelper(this);
+        data = myDB.getListContents();
 
         workoutName = findViewById(R.id.workoutTitle);
         name = getIntent().getExtras().getString("WorkoutName");

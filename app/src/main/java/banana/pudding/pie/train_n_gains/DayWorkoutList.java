@@ -3,8 +3,10 @@ package banana.pudding.pie.train_n_gains;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -23,8 +25,12 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.io.FileNotFoundException;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
+
+import sun.bob.mcalendarview.vo.DateData;
 
 
 public class DayWorkoutList extends Fragment {
@@ -34,7 +40,13 @@ public class DayWorkoutList extends Fragment {
     private Adapter adapter;
     private Button startWorkoutButton;
     private DatabaseHelper myDB;
-    ArrayAdapter listAdapter;
+    private String dValue;
+    private String mValue;
+    private String dayValue;
+    private String monthValue;
+    private SharedPreferences prefs;
+    private SharedPreferences.Editor editor;
+    public DateData newDate;
 
     public DayWorkoutList() {
         // Required empty public constructor
@@ -52,22 +64,54 @@ public class DayWorkoutList extends Fragment {
 
 
     @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState){
         super.onViewCreated(view, savedInstanceState);
 
         myDB = new DatabaseHelper(getContext());
         final Cursor data = myDB.getListContents();
         final ArrayList<String> theList = new ArrayList<>();
+        dayValue = getArguments().getString("WorkoutDay").toString();
+        monthValue = getArguments().getString("WorkoutMonth").toString();
 
         workoutList=view.findViewById(R.id.day_workout_list);
         startWorkoutButton=view.findViewById(R.id.startWorkout);
 
+
         {
             while(data.moveToNext()){
-                theList.add(data.getString(1));
-                adapter=new Adapter(getContext(),R.layout.plan_list_item, theList);
-                workoutList.setAdapter(adapter);
+
+                dValue = data.getString(5);
+                mValue = data.getString(6);
+
+                if(dValue.equals(dayValue) && mValue.equals(monthValue))
+                {
+                    theList.add(data.getString(1));
+                    adapter=new Adapter(getContext(),R.layout.plan_list_item, theList);
+                    workoutList.setAdapter(adapter);
+                }
+
             }
+        }
+
+
+        //date.setDay(1);
+        //date.setMonth(1);
+        //date.setYear(1);
+        if(theList.isEmpty())
+        {
+            FragmentManager fragmentManager = getFragmentManager();
+            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+            prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
+            editor = prefs.edit();
+
+            DayWorkoutEmpty dwe=new DayWorkoutEmpty();
+            dwe.date=newDate;
+
+            editor.putString("wDay", dayValue);
+            editor.putString("wMonth", monthValue);
+
+            fragmentTransaction.replace(R.id.frameLayout, dwe);
+            fragmentTransaction.commit();
         }
 
 

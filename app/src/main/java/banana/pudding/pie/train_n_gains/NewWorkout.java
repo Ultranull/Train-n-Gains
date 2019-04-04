@@ -2,6 +2,8 @@ package banana.pudding.pie.train_n_gains;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
@@ -32,6 +34,9 @@ public class NewWorkout extends AppCompatActivity implements View.OnClickListene
     private WorkoutPlan wop;
     private DateData day;
     private DatabaseHelper myDB;
+    private SharedPreferences prefs;
+    private String d;
+    private String m;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,8 +64,10 @@ public class NewWorkout extends AppCompatActivity implements View.OnClickListene
         adapter=new Adapter(this,R.layout.new_workout_actions_list_item,wop.getWorkouts(),this);
         activities.setAdapter(adapter);
 
+        prefs = PreferenceManager.getDefaultSharedPreferences(this);
+        d = prefs.getString("wDay", day.getDayString());
+        m = prefs.getString("wMonth", day.getMonthString());
 
-        //wop.addWorkout(new WorkoutAction(0,"sample","sample","",WorkoutAction.TYPE.ARMS));
     }
 
     @Override
@@ -78,7 +85,7 @@ public class NewWorkout extends AppCompatActivity implements View.OnClickListene
         ActionManager am=WorkoutSchedule.getInstance().actionManager;
         wop.addWorkout(am.getAction(item.getItemId()));
         //AddData(am.getAction(item.getItemId()).getName(), am.getAction(item.getItemId()).getDescription(), am.getAction(item.getItemId()).getInstructions());
-        AddData(am.getAction(item.getItemId()));
+        AddData(am.getAction(item.getItemId()), d, m);
         adapter.notifyDataSetChanged();
         return super.onContextItemSelected(item);
     }
@@ -155,9 +162,9 @@ public class NewWorkout extends AppCompatActivity implements View.OnClickListene
     }
 
 
-    public void AddData(WorkoutAction a)
+    public void AddData(WorkoutAction a, String day, String month)
     {
-        boolean insertData = myDB.addData(a);
+        boolean insertData = myDB.addData(a, day, month);
 
         if(insertData ==true){
             Toast.makeText(this, "Successfully Entered Workout Information!", Toast.LENGTH_LONG).show();
