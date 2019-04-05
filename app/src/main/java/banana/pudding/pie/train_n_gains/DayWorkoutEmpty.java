@@ -41,6 +41,8 @@ public class DayWorkoutEmpty extends Fragment {
             @Override
             public void onClick(View v) {
                 Intent intent=new Intent(getContext(),NewWorkout.class);
+                if(date==null)
+                    date=WorkoutSchedule.today();
                 intent.putExtra("day",date.getDay());
                 intent.putExtra("month",date.getMonth());
                 intent.putExtra("year",date.getYear());

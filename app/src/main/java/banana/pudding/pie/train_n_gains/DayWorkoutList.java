@@ -70,7 +70,7 @@ public class DayWorkoutList extends Fragment {
         myDB = new DatabaseHelper(getContext());
         final Cursor data = myDB.getListContents();
         final ArrayList<String> theList = new ArrayList<>();
-        dayValue = getArguments().getString("WorkoutDay").toString();
+        dayValue = getArguments().getString("WorkoutDay");
         monthValue = getArguments().getString("WorkoutMonth").toString();
 
         workoutList=view.findViewById(R.id.day_workout_list);

@@ -3,6 +3,10 @@ package banana.pudding.pie.train_n_gains;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
+import android.hardware.Sensor;
+import android.hardware.SensorEvent;
+import android.hardware.SensorEventListener;
+import android.hardware.SensorManager;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentManager;
@@ -21,9 +25,14 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class ActiveWorkout extends AppCompatActivity {
+import org.joml.Vector3f;
 
-    private TextView workoutName, workoutInsructions, workoutDescription;
+
+public class ActiveWorkout extends AppCompatActivity  implements SensorEventListener {
+
+    private SensorManager sensorManager;
+
+    private TextView workoutName, insructions, description;
     private Button completeWorkout;
     private String name, ins, des;
     private WorkoutPlan currentPlan;
@@ -44,12 +53,13 @@ public class ActiveWorkout extends AppCompatActivity {
         myDB = new DatabaseHelper(this);
         data = myDB.getListContents();
 
-        workoutName = findViewById(R.id.workoutTitle);
+        workoutName = findViewById(R.id.action_title);
         name = getIntent().getExtras().getString("WorkoutName");
         workoutName.setText(name);
 
+        insructions=findViewById(R.id.action_instructions);
 
-        completeWorkout = findViewById(R.id.complete);
+        completeWorkout = findViewById(R.id.completed_button);
         completeWorkout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -58,8 +68,31 @@ public class ActiveWorkout extends AppCompatActivity {
             }
         });
 
+
+        sensorManager=(SensorManager) getSystemService(SENSOR_SERVICE);
+        sensorManager.registerListener(this,
+                sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER),sensorManager.SENSOR_DELAY_NORMAL);
     }
 
+    @Override
+    public void onAccuracyChanged(Sensor arg0, int arg1) {
+    }
 
+    private Vector3f oldacc=new Vector3f(0);
+
+    @Override
+    public void onSensorChanged(SensorEvent event) {
+        if (event.sensor.getType()==Sensor.TYPE_ACCELEROMETER){
+
+            Vector3f acc=new Vector3f(
+                    event.values[0],
+                    event.values[1],
+                    event.values[2]);
+
+            Vector3f dif=oldacc.sub(acc);
+            insructions.setText(dif.toString());
+            oldacc=acc;
+        }
+    }
 
 }
