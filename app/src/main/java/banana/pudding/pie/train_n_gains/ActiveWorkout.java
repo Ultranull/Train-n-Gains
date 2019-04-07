@@ -25,6 +25,10 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.jjoe64.graphview.GraphView;
+import com.jjoe64.graphview.series.DataPoint;
+import com.jjoe64.graphview.series.LineGraphSeries;
+
 import org.joml.Vector3f;
 
 
@@ -32,13 +36,12 @@ public class ActiveWorkout extends AppCompatActivity  implements SensorEventList
 
     private SensorManager sensorManager;
 
-    private TextView workoutName, insructions, description;
+    private TextView workoutName, insructions, description,repsview;
     private Button completeWorkout,calibrate;
     private String name, ins, des;
     private WorkoutPlan currentPlan;
     private DatabaseHelper myDB;
     private Cursor data;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,7 +62,7 @@ public class ActiveWorkout extends AppCompatActivity  implements SensorEventList
 
         insructions=findViewById(R.id.action_instructions);
         description=findViewById(R.id.action_description);
-
+repsview=findViewById(R.id.number_of_reps);
 
         completeWorkout = findViewById(R.id.completed_button);
         completeWorkout.setOnClickListener(this);
@@ -85,10 +88,11 @@ public class ActiveWorkout extends AppCompatActivity  implements SensorEventList
     public void onAccuracyChanged(Sensor arg0, int arg1) {
     }
 
-    private boolean capCalibrate=false;
+    private boolean capCalibrate=false,repping=false;
     private Vector3f down=new Vector3f(1,2,3);
-    private double[] hist=new double[10];
+    private double[] hist=new double[20];
     private int index=0;
+    private int reps=0;
 
     @Override
     public void onSensorChanged(SensorEvent event) {
@@ -108,21 +112,21 @@ public class ActiveWorkout extends AppCompatActivity  implements SensorEventList
                 float diff = acc.dot(down)/down.length();
                 hist[index%hist.length]=diff-9.81;
                 index++;
-                description.setText(down.toString()+" "+diff);
             }
-            String t="",s="";
             double avg=0;
+            DataPoint[] data=new DataPoint[hist.length];
             for(int i=0;i<hist.length;i++) {
-                String val=Math.round(hist[i])+" ";
-                t +=  val;
-                for(int j=0;j<val.length();j++)
-                    if(i==index%hist.length)
-                        s+="^";
-                    else s+="-";
+                data[i]=new DataPoint(i,Math.round(hist[i]));
                 avg+=Math.round(hist[i]);
             }
-            //avg/=hist.length;
-            insructions.setText(t+"\n"+s+"\n"+avg);
+            if(avg<-5&&!repping)
+                repping=true;
+            else if(repping&&avg==0){
+                repping=false;
+                reps++;
+            }
+            repsview.setText(reps+"");
+
 
         }
     }
