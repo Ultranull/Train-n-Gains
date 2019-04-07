@@ -28,12 +28,12 @@ import android.widget.Toast;
 import org.joml.Vector3f;
 
 
-public class ActiveWorkout extends AppCompatActivity  implements SensorEventListener {
+public class ActiveWorkout extends AppCompatActivity  implements SensorEventListener, View.OnClickListener {
 
     private SensorManager sensorManager;
 
     private TextView workoutName, insructions, description;
-    private Button completeWorkout;
+    private Button completeWorkout,calibrate;
     private String name, ins, des;
     private WorkoutPlan currentPlan;
     private DatabaseHelper myDB;
@@ -62,55 +62,67 @@ public class ActiveWorkout extends AppCompatActivity  implements SensorEventList
 
 
         completeWorkout = findViewById(R.id.completed_button);
-        completeWorkout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+        completeWorkout.setOnClickListener(this);
 
-
-            }
-        });
+        calibrate=findViewById(R.id.calibrate_button);
+        calibrate.setOnClickListener(this);
 
 
         sensorManager=(SensorManager) getSystemService(SENSOR_SERVICE);
         sensorManager.registerListener(this,
-                sensorManager.getDefaultSensor(Sensor.TYPE_LINEAR_ACCELERATION),sensorManager.SENSOR_DELAY_NORMAL);
+                sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER),sensorManager.SENSOR_DELAY_NORMAL);
     }
+    @Override
+    public void onClick(View view) {
+        switch (view.getId()){
+            case R.id.calibrate_button:{
+                capCalibrate=true;
+            }break;
+        }
 
+    }
     @Override
     public void onAccuracyChanged(Sensor arg0, int arg1) {
     }
 
-    private Vector3f oldacc=new Vector3f(0);
-    private double timediff=.5;
+    private boolean capCalibrate=false;
+    private Vector3f down=new Vector3f(1,2,3);
+    private double[] hist=new double[10];
+    private int index=0;
 
     @Override
     public void onSensorChanged(SensorEvent event) {
-        if (event.sensor.getType()==Sensor.TYPE_LINEAR_ACCELERATION){
+        if (event.sensor.getType()==Sensor.TYPE_ACCELEROMETER){
+            if (capCalibrate) {
+                down = new Vector3f(
+                        event.values[0],
+                        event.values[1],
+                        event.values[2]);
+                capCalibrate=false;
+            }else if(!down.equals(1,2,3)){
+                Vector3f acc = new Vector3f(
+                        event.values[0],
+                        event.values[1],
+                        event.values[2]);
 
-            Vector3f acc=new Vector3f(
-                    event.values[0],
-                    event.values[1],
-                    event.values[2]);
-
-            Vector3f dif=oldacc.sub(acc);
-            oldacc=acc;
-
-            String direction="";
-            if (dif.x > 2){
-                direction += "LEFT";
+                float diff = acc.dot(down)/down.length();
+                hist[index%hist.length]=diff-9.81;
+                index++;
+                description.setText(down.toString()+" "+diff);
             }
-            else if (dif.x < -2){
-                direction += "RIGHT";
+            String t="",s="";
+            double avg=0;
+            for(int i=0;i<hist.length;i++) {
+                String val=Math.round(hist[i])+" ";
+                t +=  val;
+                for(int j=0;j<val.length();j++)
+                    if(i==index%hist.length)
+                        s+="^";
+                    else s+="-";
+                avg+=Math.round(hist[i]);
             }
-
-            if (dif.y > 2){
-                direction += "DOWN";
-            }
-            else if (dif.y < -2){
-                direction += "UP";
-            }
-
-            description.setText(direction);
+            //avg/=hist.length;
+            insructions.setText(t+"\n"+s+"\n"+avg);
 
         }
     }
