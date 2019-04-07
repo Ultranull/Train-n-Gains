@@ -58,6 +58,8 @@ public class ActiveWorkout extends AppCompatActivity  implements SensorEventList
         workoutName.setText(name);
 
         insructions=findViewById(R.id.action_instructions);
+        description=findViewById(R.id.action_description);
+
 
         completeWorkout = findViewById(R.id.completed_button);
         completeWorkout.setOnClickListener(new View.OnClickListener() {
@@ -71,7 +73,7 @@ public class ActiveWorkout extends AppCompatActivity  implements SensorEventList
 
         sensorManager=(SensorManager) getSystemService(SENSOR_SERVICE);
         sensorManager.registerListener(this,
-                sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER),sensorManager.SENSOR_DELAY_NORMAL);
+                sensorManager.getDefaultSensor(Sensor.TYPE_LINEAR_ACCELERATION),sensorManager.SENSOR_DELAY_NORMAL);
     }
 
     @Override
@@ -79,10 +81,11 @@ public class ActiveWorkout extends AppCompatActivity  implements SensorEventList
     }
 
     private Vector3f oldacc=new Vector3f(0);
+    private double timediff=.5;
 
     @Override
     public void onSensorChanged(SensorEvent event) {
-        if (event.sensor.getType()==Sensor.TYPE_ACCELEROMETER){
+        if (event.sensor.getType()==Sensor.TYPE_LINEAR_ACCELERATION){
 
             Vector3f acc=new Vector3f(
                     event.values[0],
@@ -90,8 +93,25 @@ public class ActiveWorkout extends AppCompatActivity  implements SensorEventList
                     event.values[2]);
 
             Vector3f dif=oldacc.sub(acc);
-            insructions.setText(dif.toString());
             oldacc=acc;
+
+            String direction="";
+            if (dif.x > 2){
+                direction += "LEFT";
+            }
+            else if (dif.x < -2){
+                direction += "RIGHT";
+            }
+
+            if (dif.y > 2){
+                direction += "DOWN";
+            }
+            else if (dif.y < -2){
+                direction += "UP";
+            }
+
+            description.setText(direction);
+
         }
     }
 
