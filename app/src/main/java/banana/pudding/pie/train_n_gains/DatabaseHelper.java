@@ -42,7 +42,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public boolean addData(WorkoutAction woa, String day, String month) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
-        contentValues.put(ID, woa.getId());
+        //contentValues.put(ID, woa.getId());
         contentValues.put(COL_NAME, woa.getName());
         contentValues.put(COL_DESC, woa.getDescription());
         contentValues.put(COL_INST, woa.getInstructions());
