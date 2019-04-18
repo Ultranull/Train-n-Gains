@@ -31,7 +31,7 @@ import sun.bob.mcalendarview.vo.MarkedDates;
 
 import static banana.pudding.pie.train_n_gains.DatabaseHelper.TABLE_NAME;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
     private MCalendarView calender;
     private TextView datetitle,monthtitle;
@@ -87,12 +87,7 @@ public class MainActivity extends AppCompatActivity {
         //calender.hasTitle(false);
 
         totoday=findViewById(R.id.move_to_today);
-        totoday.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                calender.travelTo(WorkoutSchedule.today());
-            }
-        });
+        totoday.setOnClickListener(this);
 
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
@@ -132,6 +127,10 @@ public class MainActivity extends AppCompatActivity {
         editor = prefs.edit();
     }
 
+    @Override
+    public void onClick(View v) {
+        calender.travelTo(WorkoutSchedule.today());
+    }
     private class DayListener extends OnDateClickListener{
         @SuppressLint("SetTextI18n")
         @Override
