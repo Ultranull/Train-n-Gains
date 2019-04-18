@@ -155,8 +155,8 @@ public class DayWorkoutList extends Fragment {
                 @Override
                 public void onClick(View view) {
                     Intent intent = new Intent(getActivity(), ActiveWorkout.class);
-                    String wName = objects.get(0).toString();
-                    intent.putExtra("WorkoutName", wName);
+                    intent.putExtra("DV", dayValue);
+                    intent.putExtra("MV", monthValue);
                     startActivity(intent);
 
                 }

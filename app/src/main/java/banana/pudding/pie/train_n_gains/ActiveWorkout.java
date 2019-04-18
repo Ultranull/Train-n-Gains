@@ -31,14 +31,16 @@ import com.jjoe64.graphview.series.LineGraphSeries;
 
 import org.joml.Vector3f;
 
+import java.util.ArrayList;
+
 
 public class ActiveWorkout extends AppCompatActivity  implements SensorEventListener, View.OnClickListener {
 
     private SensorManager sensorManager;
-
-    private TextView workoutName, insructions, description,repsview;
+    private TextView workoutName, instructions, description,repsview;
     private Button completeWorkout,calibrate;
-    private String name, ins, des;
+    private String day, month, ins, des, dValue, mValue;
+    private int itr = 0, size=1;
     private WorkoutPlan currentPlan;
     private DatabaseHelper myDB;
     private Cursor data;
@@ -56,18 +58,62 @@ public class ActiveWorkout extends AppCompatActivity  implements SensorEventList
         myDB = new DatabaseHelper(this);
         data = myDB.getListContents();
 
+        final ArrayList<String> nameList = new ArrayList<>();
+        final ArrayList<String> descriptionList = new ArrayList<>();
+        final ArrayList<String> instructionsList = new ArrayList<>();
+        final ArrayList<String> typeList = new ArrayList<>();
+
+        //Get the Day and Month for the started workout list.
+        day = getIntent().getExtras().getString("DV");
+        month = getIntent().getExtras().getString("MV");
+
         workoutName = findViewById(R.id.action_title);
-        name = getIntent().getExtras().getString("WorkoutName");
-        workoutName.setText(name);
-
-        insructions=findViewById(R.id.action_instructions);
+        instructions=findViewById(R.id.action_instructions);
         description=findViewById(R.id.action_description);
-repsview=findViewById(R.id.number_of_reps);
-
+        repsview=findViewById(R.id.number_of_reps);
         completeWorkout = findViewById(R.id.completed_button);
-        completeWorkout.setOnClickListener(this);
-
         calibrate=findViewById(R.id.calibrate_button);
+
+
+        {
+            while(data.moveToNext()){
+
+                dValue = data.getString(5);
+                mValue = data.getString(6);
+
+                if(dValue.equals(day) && mValue.equals(month))
+                {
+                    nameList.add(data.getString(1));
+                    descriptionList.add(data.getString(2));
+                    instructionsList.add(data.getString(3));
+                    typeList.add(data.getString(4));
+                }
+            }
+        }
+
+        //set TextViews equal to the first item in each list
+        workoutName.setText(nameList.get(itr));
+        description.setText(descriptionList.get(itr));
+        instructions.setText(instructionsList.get(itr));
+
+        completeWorkout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(size < nameList.size())
+                {
+                    itr++;
+                    size++;
+                    workoutName.setText(nameList.get(itr));
+                    description.setText(descriptionList.get(itr));
+                    instructions.setText(instructionsList.get(itr));
+                }
+                else
+                {
+                    finish();
+                }
+            }
+        });
+
         calibrate.setOnClickListener(this);
 
 
