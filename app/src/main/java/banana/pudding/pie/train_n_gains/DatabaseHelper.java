@@ -62,6 +62,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
 
+    public void clearTables(){
+        SQLiteDatabase db = this.getReadableDatabase();
+        db.execSQL("delete from B");
+    }
 
     public Cursor getListContents() {
         SQLiteDatabase db = this.getReadableDatabase();

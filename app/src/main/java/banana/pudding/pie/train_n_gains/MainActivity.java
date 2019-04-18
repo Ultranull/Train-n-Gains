@@ -15,6 +15,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.CalendarView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.io.PrintWriter;
 import java.util.ArrayList;
@@ -67,6 +68,19 @@ public class MainActivity extends AppCompatActivity {
         calender=findViewById(R.id.CV);
         datetitle=findViewById(R.id.day_title);
         monthtitle=findViewById(R.id.month_title);
+        monthtitle.setOnClickListener(new View.OnClickListener() {
+            int count=0;
+            @Override
+            public void onClick(View v) {
+
+                count++;
+                if(count==2){
+                    myDB.clearTables();
+                    count=0;
+                    System.out.println("cleared");
+                }
+            }
+        });
 
         calender.setOnMonthChangeListener(new MonthListener());
         calender.setOnDateClickListener(new DayListener());
@@ -152,13 +166,12 @@ public class MainActivity extends AppCompatActivity {
             if(fortoday!=null || data.getCount() != 0) {
                 DayWorkoutList dwl=new DayWorkoutList();
                 dwl.setPlan(fortoday);
-                dwl.newDate=lastday;
+                dwl.newDate=date;
 
                 Bundle bundle = new Bundle();
-                bundle.putString("WorkoutDay", lastday.getDayString());
-                bundle.putString("WorkoutMonth", lastday.getMonthString());
+                bundle.putString("WorkoutDay", dayValue);
+                bundle.putString("WorkoutMonth", monthValue);
                 dwl.setArguments(bundle);
-                getFragmentManager().beginTransaction();
 
                 fragmentTransaction.replace(R.id.frameLayout, dwl);
                 fragmentTransaction.commit();
