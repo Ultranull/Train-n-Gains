@@ -172,6 +172,7 @@ public class ActiveWorkout extends AppCompatActivity  implements SensorEventList
 
     @Override
     public void onSensorChanged(SensorEvent event) {
+        //Definition wise, a set is between 8-12 repetitions. So when the repsTextView is between 8-12, set setTextView accordingly.
         if (event.sensor.getType()==Sensor.TYPE_ACCELEROMETER){
             if (capCalibrate) {
                 down = new Vector3f(
