@@ -9,8 +9,8 @@
 
     <android.support.v7.widget.AppCompatImageView
         android:id="@+id/appCompatImageView"
-        android:layout_width="161dp"
-        android:layout_height="350dp"
+        android:layout_width="120dp"
+        android:layout_height="264dp"
         android:layout_marginStart="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginBottom="76dp"
@@ -24,12 +24,12 @@
 
     <ImageView
         android:id="@+id/imageView"
-        android:layout_width="274dp"
-        android:layout_height="271dp"
+        android:layout_width="224dp"
+        android:layout_height="230dp"
         android:layout_marginTop="104dp"
         app:layout_constraintBottom_toTopOf="@+id/guideline5"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.496"
+        app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="1.0"
