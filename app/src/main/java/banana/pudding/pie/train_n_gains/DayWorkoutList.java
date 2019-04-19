@@ -42,6 +42,7 @@ public class DayWorkoutList extends Fragment {
     private DatabaseHelper myDB;
     private String dValue;
     private String mValue;
+    private String completedValue;
     private String dayValue;
     private String monthValue;
     private SharedPreferences prefs;
@@ -70,6 +71,7 @@ public class DayWorkoutList extends Fragment {
         myDB = new DatabaseHelper(getContext());
         final Cursor data = myDB.getListContents();
         final ArrayList<String> theList = new ArrayList<>();
+        final ArrayList<String> completionList = new ArrayList<>();
         dayValue = getArguments().getString("WorkoutDay");
         monthValue = getArguments().getString("WorkoutMonth").toString();
 
@@ -82,12 +84,17 @@ public class DayWorkoutList extends Fragment {
 
                 dValue = data.getString(5);
                 mValue = data.getString(6);
+                completedValue = data.getString(7);
 
-                if(dValue.equals(dayValue) && mValue.equals(monthValue))
+                if(dValue.equals(dayValue) && mValue.equals(monthValue) && !completedValue.equals("0"))
                 {
                     theList.add(data.getString(1));
                     adapter=new Adapter(getContext(),R.layout.plan_list_item, theList);
                     workoutList.setAdapter(adapter);
+                }
+                else if(dValue.equals(dayValue) && mValue.equals(monthValue) && completedValue.equals("0"))
+                {
+                    completionList.add(data.getString(1));
                 }
 
             }
@@ -97,7 +104,7 @@ public class DayWorkoutList extends Fragment {
         //date.setDay(1);
         //date.setMonth(1);
         //date.setYear(1);
-        if(theList.isEmpty())
+        if(theList.isEmpty() && completionList.isEmpty())
         {
             FragmentManager fragmentManager = getFragmentManager();
             FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
@@ -112,6 +119,16 @@ public class DayWorkoutList extends Fragment {
 
             fragmentTransaction.replace(R.id.frameLayout, dwe);
             fragmentTransaction.commit();
+        }
+        else if(theList.isEmpty() && !completionList.isEmpty())
+        {
+
+            FragmentManager fragmentManager = getFragmentManager();
+            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+            DayWorkoutCompleted dayWorkoutCompleted = new DayWorkoutCompleted();
+            fragmentTransaction.replace(R.id.frameLayout, dayWorkoutCompleted);
+            fragmentTransaction.commit();
+
         }
 
 

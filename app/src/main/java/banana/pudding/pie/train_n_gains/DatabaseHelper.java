@@ -18,6 +18,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String COL_TYPE = "TYPE";
     public static final String COL_DAY = "DAY";
     public static final String COL_MONTH = "MONTH";
+    public static final String COL_COMPLETED = "COMPLETED";
 
 
 
@@ -26,7 +27,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     @Override
     public void onCreate (SQLiteDatabase db) {
         String createTable = "CREATE TABLE " + TABLE_NAME + " (ID INTEGER PRIMARY KEY AUTOINCREMENT, " +
-                " NAME TEXT, DESCRIPTION TEXT, INSTRUCTION TEXT, TYPE TEXT, DAY TEXT, MONTH TEXT)";
+                " NAME TEXT, DESCRIPTION TEXT, INSTRUCTION TEXT, TYPE TEXT, DAY TEXT, MONTH TEXT, COMPLETED TEXT)";
         db.execSQL(createTable);
     }
 
@@ -39,7 +40,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
 
 
-    public boolean addData(WorkoutAction woa, String day, String month) {
+    public boolean addData(WorkoutAction woa, String day, String month, String completed) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
         //contentValues.put(ID, woa.getId());
@@ -49,6 +50,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         contentValues.put(COL_TYPE, woa.getType().ordinal());
         contentValues.put(COL_DAY, day);
         contentValues.put(COL_MONTH, month);
+        contentValues.put(COL_COMPLETED, completed);
 
 
         long result = db.insert(TABLE_NAME, null, contentValues);
@@ -87,7 +89,13 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     }
 
+    public void updateCompletion(String newCompletion, String oldCompletion) {
+        SQLiteDatabase db = this.getWritableDatabase();
 
+        String query = "UPDATE " + TABLE_NAME + " SET " + COL_COMPLETED +
+                " = '" +newCompletion + "' WHERE " + COL_COMPLETED + " = '" + oldCompletion + "'";
 
+        db.execSQL(query);
+    }
 
 }

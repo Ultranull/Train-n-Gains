@@ -67,6 +67,8 @@ public class ActiveWorkout extends AppCompatActivity  implements SensorEventList
         final ArrayList<String> descriptionList = new ArrayList<>();
         final ArrayList<String> instructionsList = new ArrayList<>();
         final ArrayList<String> typeList = new ArrayList<>();
+        final ArrayList<String> completionList = new ArrayList<>();
+
 
         //Get the Day and Month for the started workout list.
         day = getIntent().getExtras().getString("DV");
@@ -94,6 +96,7 @@ public class ActiveWorkout extends AppCompatActivity  implements SensorEventList
                     descriptionList.add(data.getString(2));
                     instructionsList.add(data.getString(3));
                     typeList.add(data.getString(4));
+                    completionList.add(data.getString(7));
                 }
             }
         }
@@ -102,6 +105,7 @@ public class ActiveWorkout extends AppCompatActivity  implements SensorEventList
         workoutName.setText(nameList.get(itr));
         description.setText(descriptionList.get(itr));
         instructions.setText(instructionsList.get(itr));
+        myDB.updateCompletion("0", completionList.get(itr));
 
         //Start Chronometer for the first exercise
         if(!running) {
@@ -115,9 +119,6 @@ public class ActiveWorkout extends AppCompatActivity  implements SensorEventList
             public void onClick(View view) {
                 if(size < nameList.size())
                 {
-                    //chronometer.stop();
-                    //pauseOffset = SystemClock.elapsedRealtime() - chronometer.getBase();
-
                     itr++;
                     size++;
 
@@ -127,6 +128,7 @@ public class ActiveWorkout extends AppCompatActivity  implements SensorEventList
                     workoutName.setText(nameList.get(itr));
                     description.setText(descriptionList.get(itr));
                     instructions.setText(instructionsList.get(itr));
+                    myDB.updateCompletion("0", completionList.get(itr));
 
                     //Reset chronometer for next workout
                     chronometer.setBase(SystemClock.elapsedRealtime());
@@ -204,5 +206,11 @@ public class ActiveWorkout extends AppCompatActivity  implements SensorEventList
 
         }
     }
+
+
+
+
+
+
 
 }

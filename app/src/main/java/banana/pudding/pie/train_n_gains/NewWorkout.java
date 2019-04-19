@@ -22,6 +22,7 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 import sun.bob.mcalendarview.vo.DateData;
 
@@ -37,6 +38,25 @@ public class NewWorkout extends AppCompatActivity implements View.OnClickListene
     private SharedPreferences prefs;
     private String d;
     private String m;
+
+    private Numbers r;
+    private int temp, itr=0;
+    private String tempString;
+
+    public class Numbers {
+        Random randnum;
+
+        public Numbers() {
+            randnum = new Random();
+            //randnum.setSeed(123456789);
+        }
+
+        public int random(int i){
+            return randnum.nextInt(i);
+
+        }
+    }
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,14 +98,19 @@ public class NewWorkout extends AppCompatActivity implements View.OnClickListene
         ArrayList<WorkoutAction> actions=am.getActions();
         for(int i=0;i<actions.size();i++)
             menu.add(0,actions.get(i).getId(),0,actions.get(i).getName());
+
     }
 
     @Override
     public boolean onContextItemSelected(MenuItem item) {
         ActionManager am=WorkoutSchedule.getInstance().actionManager;
         wop.addWorkout(am.getAction(item.getItemId()));
-        //AddData(am.getAction(item.getItemId()).getName(), am.getAction(item.getItemId()).getDescription(), am.getAction(item.getItemId()).getInstructions());
-        AddData(am.getAction(item.getItemId()), d, m);
+
+        r = new Numbers();
+        temp = r.random(1000000) + 1;
+        tempString = String.valueOf(temp);
+
+        AddData(am.getAction(item.getItemId()), d, m, tempString);
         adapter.notifyDataSetChanged();
         return super.onContextItemSelected(item);
     }
@@ -162,9 +187,9 @@ public class NewWorkout extends AppCompatActivity implements View.OnClickListene
     }
 
 
-    public void AddData(WorkoutAction a, String day, String month)
+    public void AddData(WorkoutAction a, String day, String month, String completed)
     {
-        boolean insertData = myDB.addData(a, day, month);
+        boolean insertData = myDB.addData(a, day, month, completed);
 
         if(insertData ==true){
             Toast.makeText(this, "Successfully Entered Workout Information!", Toast.LENGTH_LONG).show();
