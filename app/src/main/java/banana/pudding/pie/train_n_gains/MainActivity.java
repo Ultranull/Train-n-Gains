@@ -36,6 +36,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private MCalendarView calender;
     private TextView datetitle,monthtitle;
     private Button totoday;
+    private Button settingb;
     private MarkStyle selected, planned;
     private DateData lastday;
     private DatabaseHelper myDB;
@@ -49,6 +50,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private String temp;
 
 
+    @SuppressLint("WrongViewCast")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -88,6 +90,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         totoday=findViewById(R.id.move_to_today);
         totoday.setOnClickListener(this);
+        settingb=findViewById(R.id.Settings);
+        settingb.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(MainActivity.this, SettingsActivity.class));
+            }
+        });
+
 
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
