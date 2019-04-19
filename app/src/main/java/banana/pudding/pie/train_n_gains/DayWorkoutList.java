@@ -77,6 +77,10 @@ public class DayWorkoutList extends Fragment {
 
         workoutList=view.findViewById(R.id.day_workout_list);
         startWorkoutButton=view.findViewById(R.id.startWorkout);
+        DateData today=WorkoutSchedule.today();
+        if(today.getDay()<Integer.parseInt(dayValue)&&
+                today.getMonth()<=Integer.parseInt(monthValue))
+        startWorkoutButton.setVisibility(View.GONE);
 
 
         {
