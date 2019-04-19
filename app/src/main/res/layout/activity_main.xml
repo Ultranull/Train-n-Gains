@@ -86,7 +86,7 @@
         app:layout_constraintVertical_bias="1.0" />
 
     <ImageButton
-        android:id="@+id/Settings"
+        android:id="@+id/settings"
         android:layout_width="87dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
