@@ -37,7 +37,7 @@ import java.util.ArrayList;
 public class ActiveWorkout extends AppCompatActivity  implements SensorEventListener, View.OnClickListener {
 
     private SensorManager sensorManager;
-    private TextView workoutName, instructions, description,repsview;
+    private TextView workoutName, instructions, description,repsview, setsview;
     private Button completeWorkout,calibrate;
     private String day, month, ins, des, dValue, mValue;
     private int itr = 0, size=1;
@@ -71,6 +71,7 @@ public class ActiveWorkout extends AppCompatActivity  implements SensorEventList
         instructions=findViewById(R.id.action_instructions);
         description=findViewById(R.id.action_description);
         repsview=findViewById(R.id.number_of_reps);
+        setsview=findViewById(R.id.number_of_sets);
         completeWorkout = findViewById(R.id.completed_button);
         calibrate=findViewById(R.id.calibrate_button);
 
@@ -103,6 +104,8 @@ public class ActiveWorkout extends AppCompatActivity  implements SensorEventList
                 {
                     itr++;
                     size++;
+                    repsview.setText("");
+                    setsview.setText("");
                     workoutName.setText(nameList.get(itr));
                     description.setText(descriptionList.get(itr));
                     instructions.setText(instructionsList.get(itr));
