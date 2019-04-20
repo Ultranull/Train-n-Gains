@@ -107,5 +107,4 @@
             android:text="today" />
 
     </LinearLayout>
-
 </android.support.constraint.ConstraintLayout>
