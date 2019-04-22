@@ -45,6 +45,8 @@ public class WorkoutSchedule {
     }
 
 
+
+
     public ArrayList<DateData> dates;
     public ArrayList<WorkoutPlan> plans;
     public ActionManager actionManager;
