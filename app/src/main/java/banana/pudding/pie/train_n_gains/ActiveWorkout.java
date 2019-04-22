@@ -147,7 +147,7 @@ public class ActiveWorkout extends AppCompatActivity  implements SensorEventList
 
         sensorManager=(SensorManager) getSystemService(SENSOR_SERVICE);
         sensorManager.registerListener(this,
-                sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER),sensorManager.SENSOR_DELAY_NORMAL);
+                sensorManager.getDefaultSensor(Sensor.TYPE_LINEAR_ACCELERATION),sensorManager.SENSOR_DELAY_FASTEST);
 
 
     }
@@ -168,12 +168,12 @@ public class ActiveWorkout extends AppCompatActivity  implements SensorEventList
     private Vector3f down=new Vector3f(1,2,3);
     private double[] hist=new double[20];
     private int index=0;
-    private int reps=0;
+    private int reps=1,sets=0,detects=1;
 
     @Override
     public void onSensorChanged(SensorEvent event) {
         //Definition wise, a set is between 8-12 repetitions. So when the repsTextView is between 8-12, set setTextView accordingly.
-        if (event.sensor.getType()==Sensor.TYPE_ACCELEROMETER){
+        if (event.sensor.getType()==Sensor.TYPE_LINEAR_ACCELERATION){
             if (capCalibrate) {
                 down = new Vector3f(
                         event.values[0],
@@ -187,7 +187,7 @@ public class ActiveWorkout extends AppCompatActivity  implements SensorEventList
                         event.values[2]);
 
                 float diff = acc.dot(down)/down.length();
-                hist[index%hist.length]=diff-9.81;
+                hist[index%hist.length]=diff;
                 index++;
             }
             double avg=0;
@@ -196,14 +196,19 @@ public class ActiveWorkout extends AppCompatActivity  implements SensorEventList
                 data[i]=new DataPoint(i,Math.round(hist[i]));
                 avg+=Math.round(hist[i]);
             }
-            if(avg<-5&&!repping)
+            if(Math.abs(avg)>=10&&!repping)
                 repping=true;
             else if(repping&&avg==0){
                 repping=false;
-                reps++;
+                detects++;
+                if((detects)%3==0) {
+                    reps++;
+                    if ((reps) % 9 == 0)
+                        sets++;
+                }
             }
-            repsview.setText(reps+"");
-
+            repsview.setText((reps-1)+"");
+            setsview.setText(sets+"");
 
         }
     }
