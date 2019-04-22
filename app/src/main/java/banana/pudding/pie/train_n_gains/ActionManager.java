@@ -14,6 +14,7 @@ public class ActionManager {
         01 | push ups | ..... | ...
      */
 
+
     private LinkedHashMap<Integer,WorkoutAction> actions;
 
     public ActionManager(){

@@ -28,7 +28,9 @@ import android.widget.Toast;
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import sun.bob.mcalendarview.vo.DateData;
 
@@ -80,7 +82,7 @@ public class DayWorkoutList extends Fragment {
         DateData today=WorkoutSchedule.today();
         if(today.getDay()<Integer.parseInt(dayValue)&&
                 today.getMonth()<=Integer.parseInt(monthValue))
-        startWorkoutButton.setVisibility(View.GONE);
+            startWorkoutButton.setVisibility(View.GONE);
 
 
         {
@@ -90,17 +92,18 @@ public class DayWorkoutList extends Fragment {
                 mValue = data.getString(6);
                 completedValue = data.getString(7);
 
-                if(dValue.equals(dayValue) && mValue.equals(monthValue) && !completedValue.equals("0"))
-                {
-                    theList.add(data.getString(1));
-                    adapter=new Adapter(getContext(),R.layout.plan_list_item, theList);
-                    workoutList.setAdapter(adapter);
-                }
-                else if(dValue.equals(dayValue) && mValue.equals(monthValue) && completedValue.equals("0"))
-                {
-                    completionList.add(data.getString(1));
-                }
 
+                if(dValue.equals(dayValue) && mValue.equals(monthValue) ) {
+                    try {
+                        Integer.parseInt(completedValue);
+                        theList.add(data.getString(1));
+                        adapter = new Adapter(getContext(), R.layout.plan_list_item, theList);
+                        workoutList.setAdapter(adapter);
+
+                    }catch (Exception e){
+                        completionList.add(data.getString(1)+"~"+completedValue);
+                    }
+                }
             }
         }
 
@@ -130,12 +133,23 @@ public class DayWorkoutList extends Fragment {
             FragmentManager fragmentManager = getFragmentManager();
             FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
             DayWorkoutCompleted dayWorkoutCompleted = new DayWorkoutCompleted();
+            dayWorkoutCompleted.setList(completionList);
             fragmentTransaction.replace(R.id.frameLayout, dayWorkoutCompleted);
             fragmentTransaction.commit();
 
         }
 
 
+        startWorkoutButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getActivity(), ActiveWorkout.class);
+                intent.putExtra("DV", dayValue);
+                intent.putExtra("MV", monthValue);
+                startActivity(intent);
+
+            }
+        });
     }
 
 
@@ -169,21 +183,7 @@ public class DayWorkoutList extends Fragment {
             }else{
                 holder=(Holder)convertView.getTag();
             }
-            holder.title.setText(position+1+". "+objects.get(position).toString());
-
-
-            startWorkoutButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    Intent intent = new Intent(getActivity(), ActiveWorkout.class);
-                    intent.putExtra("DV", dayValue);
-                    intent.putExtra("MV", monthValue);
-                    startActivity(intent);
-
-                }
-            });
-
-
+            holder.title.setText(position+1+". "+objects.get(position));
 
             return convertView;
         }

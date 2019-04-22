@@ -50,6 +50,13 @@ public class ActiveWorkout extends AppCompatActivity  implements SensorEventList
     private Chronometer chronometer;
     private boolean running;
 
+
+    ArrayList<String> nameList = new ArrayList<>();
+    ArrayList<String> descriptionList = new ArrayList<>();
+    ArrayList<String> instructionsList = new ArrayList<>();
+    ArrayList<String> typeList = new ArrayList<>();
+    ArrayList<String> completionList = new ArrayList<>();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -63,11 +70,6 @@ public class ActiveWorkout extends AppCompatActivity  implements SensorEventList
         myDB = new DatabaseHelper(this);
         data = myDB.getListContents();
 
-        final ArrayList<String> nameList = new ArrayList<>();
-        final ArrayList<String> descriptionList = new ArrayList<>();
-        final ArrayList<String> instructionsList = new ArrayList<>();
-        final ArrayList<String> typeList = new ArrayList<>();
-        final ArrayList<String> completionList = new ArrayList<>();
 
 
         //Get the Day and Month for the started workout list.
@@ -105,7 +107,7 @@ public class ActiveWorkout extends AppCompatActivity  implements SensorEventList
         workoutName.setText(nameList.get(itr));
         description.setText(descriptionList.get(itr));
         instructions.setText(instructionsList.get(itr));
-        myDB.updateCompletion("0", completionList.get(itr));
+        //myDB.updateCompletion("0", completionList.get(itr));
 
         //Start Chronometer for the first exercise
         if(!running) {
@@ -114,33 +116,7 @@ public class ActiveWorkout extends AppCompatActivity  implements SensorEventList
             running = true;
         }
 
-        completeWorkout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if(size < nameList.size())
-                {
-                    itr++;
-                    size++;
-
-                    repsview.setText("0");
-                    setsview.setText("0");
-
-                    workoutName.setText(nameList.get(itr));
-                    description.setText(descriptionList.get(itr));
-                    instructions.setText(instructionsList.get(itr));
-                    myDB.updateCompletion("0", completionList.get(itr));
-
-                    //Reset chronometer for next workout
-                    chronometer.setBase(SystemClock.elapsedRealtime());
-                    chronometer.start();
-
-                }
-                else
-                {
-                    finish();
-                }
-            }
-        });
+        completeWorkout.setOnClickListener(this);
 
         calibrate.setOnClickListener(this);
 
@@ -157,9 +133,61 @@ public class ActiveWorkout extends AppCompatActivity  implements SensorEventList
             case R.id.calibrate_button:{
                 capCalibrate=true;
             }break;
+            case R.id.completed_button:{
+                myDB.updateCompletion("sets: "+sets+", reps: "+reps+" time: "+chronometer.getContentDescription(), completionList.get(itr));
+
+                if(size < nameList.size())
+                {
+                    itr++;
+                    size++;
+
+                    repsview.setText("0");
+                    setsview.setText("0");
+
+
+                    capCalibrate=false;
+                    repping=false;
+                    down=new Vector3f(1,2,3);
+                    hist=new double[20];
+                    index=0;
+                    reps=1;
+                    sets=0;
+                    detects=1;
+
+                    workoutName.setText(nameList.get(itr));
+                    description.setText(descriptionList.get(itr));
+                    instructions.setText(instructionsList.get(itr));
+                    //myDB.updateCompletion("0", completionList.get(itr));
+
+                    //Reset chronometer for next workout
+                    chronometer.setBase(SystemClock.elapsedRealtime());
+                    chronometer.start();
+
+                }
+                else
+                {
+                    finish();
+                }
+            }break;
         }
 
     }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        sensorManager.unregisterListener(this,sensorManager.getDefaultSensor(Sensor.TYPE_LINEAR_ACCELERATION));
+        System.out.println("sensor stopped");
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        sensorManager.registerListener(this,
+                sensorManager.getDefaultSensor(Sensor.TYPE_LINEAR_ACCELERATION),sensorManager.SENSOR_DELAY_FASTEST);
+        System.out.println("sensor resumed");
+    }
+
     @Override
     public void onAccuracyChanged(Sensor arg0, int arg1) {
     }
