@@ -160,6 +160,22 @@ public class ActiveWorkout extends AppCompatActivity  implements SensorEventList
         }
 
     }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        sensorManager.unregisterListener(this,sensorManager.getDefaultSensor(Sensor.TYPE_LINEAR_ACCELERATION));
+        System.out.println("sensor stopped");
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        sensorManager.registerListener(this,
+                sensorManager.getDefaultSensor(Sensor.TYPE_LINEAR_ACCELERATION),sensorManager.SENSOR_DELAY_FASTEST);
+        System.out.println("sensor resumed");
+    }
+
     @Override
     public void onAccuracyChanged(Sensor arg0, int arg1) {
     }
