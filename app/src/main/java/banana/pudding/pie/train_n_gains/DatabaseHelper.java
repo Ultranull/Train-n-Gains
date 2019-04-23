@@ -76,18 +76,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
 
-    public boolean deleteName(String name)
-    {
-        SQLiteDatabase db = this.getWritableDatabase();
-        long result = db.delete(TABLE_NAME, "NAME = ?", new String[] {name});
-
-        if(result == -1) {
-            return false;
-        } else {
-            return true;
-        }
-
-    }
 
     public void updateCompletion(String newCompletion, String oldCompletion) {
         SQLiteDatabase db = this.getWritableDatabase();
@@ -96,6 +84,20 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 " = '" +newCompletion + "' WHERE " + COL_COMPLETED + " = '" + oldCompletion + "'";
 
         db.execSQL(query);
+    }
+
+
+    public boolean deleteData(String data)
+    {
+        SQLiteDatabase db = this.getWritableDatabase();
+        long result = db.delete(TABLE_NAME, "COMPLETED = ?", new String[] {data});
+
+        if(result == -1) {
+            return false;
+        } else {
+            return true;
+        }
+
     }
 
 }

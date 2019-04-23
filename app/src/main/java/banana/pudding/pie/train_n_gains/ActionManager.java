@@ -27,7 +27,7 @@ public class ActionManager {
                         "your abdomen. Lift until your arms are straight. To begin, slowly bend your elbows until they are at a 90 degree angle. Lift yourself back up while exhaling at the same time.",
                 WorkoutAction.TYPE.ARMS));
 
-        actions.put(2,new WorkoutAction(2,"Sit-Ups","An abdominal exercise that helps build core strengh as well as endurance. " +
+        actions.put(2,new WorkoutAction(2,"Sit-Ups","An abdominal exercise that helps build core strength as well as endurance. " +
                 "This exercise is similar to a 'crunch', but sit-ups have a fuller range of motion.",
                 "Lye flat on your back. Keep your feet flat on the floor with you knees bent in the air. " +
                         "Keep your arms flat by your side or crossed on your chest. Lift your torso to a sitting position, " +

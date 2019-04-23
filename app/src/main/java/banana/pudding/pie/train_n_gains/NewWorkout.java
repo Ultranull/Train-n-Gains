@@ -3,11 +3,13 @@ package banana.pudding.pie.train_n_gains;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.database.Cursor;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -46,6 +48,9 @@ public class NewWorkout extends AppCompatActivity implements View.OnClickListene
     private Numbers r;
     private int temp, itr=0;
     private String tempString;
+
+    final ArrayList<String> actionsList = new ArrayList<>();
+
 
     public class Numbers {
         Random randnum;
@@ -141,6 +146,7 @@ public class NewWorkout extends AppCompatActivity implements View.OnClickListene
         r = new Numbers();
         temp = r.random(1000000) + 1;
         tempString = String.valueOf(temp);
+        actionsList.add(tempString);
 
         AddData(am.getAction(item.getItemId()), d, m, tempString);
         adapter.notifyDataSetChanged();
@@ -160,6 +166,9 @@ public class NewWorkout extends AppCompatActivity implements View.OnClickListene
             }break;
             case R.id.new_workout_delete:{
                 wop.removeWorkout(i);
+                String deleteThis = actionsList.get(i).toString();
+                Log.i("TEST DELETE", deleteThis);
+                myDB.deleteData(deleteThis);
             }break;
             case R.id.new_workout_add_action_button:{
                 openContextMenu(addActivity);
