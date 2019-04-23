@@ -15,7 +15,7 @@ public class ActionManager {
      */
 
 
-    private LinkedHashMap<Integer,WorkoutAction> actions;
+    public LinkedHashMap<Integer,WorkoutAction> actions;
 
     public ActionManager(){
         actions=new LinkedHashMap<>();

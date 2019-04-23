@@ -31,6 +31,10 @@ public class NewWorkout extends AppCompatActivity implements View.OnClickListene
     private Button add,addActivity;
     private ListView activities;
     private Adapter adapter;
+    private EditText newName;
+    private EditText newDesc;
+    private EditText newIns;
+    private Button create;
 
     private WorkoutPlan wop;
     private DateData day;
@@ -48,12 +52,10 @@ public class NewWorkout extends AppCompatActivity implements View.OnClickListene
 
         public Numbers() {
             randnum = new Random();
-            //randnum.setSeed(123456789);
         }
 
         public int random(int i){
             return randnum.nextInt(i);
-
         }
     }
 
@@ -70,6 +72,36 @@ public class NewWorkout extends AppCompatActivity implements View.OnClickListene
                 intent.getIntExtra("month",0),
                 intent.getIntExtra("day",0)
         );
+
+        newName=findViewById(R.id.newName);
+        newDesc=findViewById(R.id.newDesc);
+        newIns=findViewById(R.id.newIns);
+        create=findViewById(R.id.create);
+        create.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String newWorkoutName = newName.getText().toString();
+                String newWorkoutDescription = newDesc.getText().toString();
+                String newWorkoutInstruction = newIns.getText().toString();
+
+                if(!newWorkoutName.equals(""))
+                {
+                    ActionManager am=WorkoutSchedule.getInstance().actionManager;
+                    int i = am.actions.size() + 1;
+                    am.actions.put(i, new WorkoutAction(i, newWorkoutName, newWorkoutDescription, newWorkoutInstruction, WorkoutAction.TYPE.OTHER));
+
+                    newName.setText("");
+                    newDesc.setText("");
+                    newIns.setText("");
+                    Toast.makeText(NewWorkout.this, "Successfully added new workout.", Toast.LENGTH_LONG).show();
+                }
+                else
+                {
+                    Toast.makeText(NewWorkout.this, "You Need To Enter A New Workout Name", Toast.LENGTH_LONG).show();
+                }
+            }
+        });
+
 
         add=findViewById(R.id.new_workout_add_button);
         add.setOnClickListener(this);

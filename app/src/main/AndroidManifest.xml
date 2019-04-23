@@ -30,7 +30,8 @@
                 android:value="banana.pudding.pie.train_n_gains.MainActivity" />
         </activity>
         <activity android:name=".Congradulations" />
-        <activity android:name=".NewWorkout" />
+        <activity android:name=".NewWorkout"
+            android:windowSoftInputMode="adjustNothing"/>
         <activity android:name=".ActiveWorkout" />
         <activity android:name=".SplashScreen">
             <intent-filter>
