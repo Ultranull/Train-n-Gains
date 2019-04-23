@@ -35,9 +35,7 @@
     </connection>
   </component>
   <component name="DBNavigator.Project.DatabaseFileManager">
-    <open-files>
-      <object connection-id="c9ce9f69-2993-4bc6-9b7d-b47acb7652f0" object-ref="schemas/main/tables/B" />
-    </open-files>
+    <open-files />
   </component>
   <component name="DBNavigator.Project.DatabaseSessionManager">
     <connection id="c9ce9f69-2993-4bc6-9b7d-b47acb7652f0" />
@@ -46,7 +44,9 @@
     <filter-actions connection-id="c9ce9f69-2993-4bc6-9b7d-b47acb7652f0" dataset="main.B" active-filter-id="EMPTY_FILTER" />
   </component>
   <component name="DBNavigator.Project.EditorStateManager">
-    <last-used-providers />
+    <last-used-providers>
+      <object-type object-type="TABLE" editor-provider="DATA" />
+    </last-used-providers>
   </component>
   <component name="DBNavigator.Project.MethodExecutionManager">
     <method-browser />

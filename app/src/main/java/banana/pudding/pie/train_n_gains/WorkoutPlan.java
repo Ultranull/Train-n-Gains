@@ -44,13 +44,17 @@ public class WorkoutPlan {
     }
 
     public void moveUp(int index){
-        WorkoutAction val=workouts.remove(index);
-        workouts.add(index-1,val);
+        if(workouts.size()>1 && index-1!=0) {
+            WorkoutAction val = workouts.remove(index);
+            workouts.add(index - 1, val);
+        }
     }
 
     public void moveDown(int index){
+        if(workouts.size()>1 && index+1<workouts.size()) {
         WorkoutAction val=workouts.remove(index);
         workouts.add(index+1,val);
+        }
     }
 
     public ArrayList<WorkoutAction> getWorkouts() {

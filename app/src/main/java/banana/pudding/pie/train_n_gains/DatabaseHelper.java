@@ -63,6 +63,12 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         }
     }
 
+    public void moveRowUp(int row){
+        int n=row,m=row-1;
+        SQLiteDatabase db = this.getReadableDatabase();
+        db.execSQL("UPDATE "+TABLE_NAME+" SET "+ID+" = "+ID+"-1 WHERE "+ID+" > "+m+" AND "+ID+" <= "+n);
+        db.execSQL("UPDATE "+TABLE_NAME+" SET "+ID+" = m WHERE "+ID+" = n");
+    }
 
     public void clearTables(){
         SQLiteDatabase db = this.getReadableDatabase();
