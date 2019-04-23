@@ -134,7 +134,7 @@ public class ActiveWorkout extends AppCompatActivity  implements SensorEventList
                 capCalibrate=true;
             }break;
             case R.id.completed_button:{
-                myDB.updateCompletion("sets: "+sets+", reps: "+reps+" time: "+chronometer.getContentDescription(), completionList.get(itr));
+                myDB.updateCompletion("sets: "+sets+", reps: "+(reps-1)+" time: "+chronometer.getContentDescription(), completionList.get(itr));
 
                 if(size < nameList.size())
                 {
