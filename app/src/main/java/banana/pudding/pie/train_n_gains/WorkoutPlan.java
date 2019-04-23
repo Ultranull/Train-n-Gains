@@ -44,7 +44,7 @@ public class WorkoutPlan {
     }
 
     public void moveUp(int index){
-        if(workouts.size()>1 && index-1!=0) {
+        if(workouts.size()>1 && index-1>=0) {
             WorkoutAction val = workouts.remove(index);
             workouts.add(index - 1, val);
         }
@@ -52,8 +52,8 @@ public class WorkoutPlan {
 
     public void moveDown(int index){
         if(workouts.size()>1 && index+1<workouts.size()) {
-        WorkoutAction val=workouts.remove(index);
-        workouts.add(index+1,val);
+            WorkoutAction val=workouts.remove(index);
+            workouts.add(index+1,val);
         }
     }
 
