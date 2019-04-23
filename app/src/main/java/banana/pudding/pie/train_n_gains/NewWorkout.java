@@ -3,11 +3,13 @@ package banana.pudding.pie.train_n_gains;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.database.Cursor;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -31,6 +33,10 @@ public class NewWorkout extends AppCompatActivity implements View.OnClickListene
     private Button add,addActivity;
     private ListView activities;
     private Adapter adapter;
+    private EditText newName;
+    private EditText newDesc;
+    private EditText newIns;
+    private Button create;
 
     private WorkoutPlan wop;
     private DateData day;
@@ -43,17 +49,18 @@ public class NewWorkout extends AppCompatActivity implements View.OnClickListene
     private int temp, itr=0;
     private String tempString;
 
+    final ArrayList<String> actionsList = new ArrayList<>();
+
+
     public class Numbers {
         Random randnum;
 
         public Numbers() {
             randnum = new Random();
-            //randnum.setSeed(123456789);
         }
 
         public int random(int i){
             return randnum.nextInt(i);
-
         }
     }
 
@@ -70,6 +77,36 @@ public class NewWorkout extends AppCompatActivity implements View.OnClickListene
                 intent.getIntExtra("month",0),
                 intent.getIntExtra("day",0)
         );
+
+        newName=findViewById(R.id.newName);
+        newDesc=findViewById(R.id.newDesc);
+        newIns=findViewById(R.id.newIns);
+        create=findViewById(R.id.create);
+        create.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String newWorkoutName = newName.getText().toString();
+                String newWorkoutDescription = newDesc.getText().toString();
+                String newWorkoutInstruction = newIns.getText().toString();
+
+                if(!newWorkoutName.equals(""))
+                {
+                    ActionManager am=WorkoutSchedule.getInstance().actionManager;
+                    int i = am.actions.size() + 1;
+                    am.actions.put(i, new WorkoutAction(i, newWorkoutName, newWorkoutDescription, newWorkoutInstruction, WorkoutAction.TYPE.OTHER));
+
+                    newName.setText("");
+                    newDesc.setText("");
+                    newIns.setText("");
+                    Toast.makeText(NewWorkout.this, "Successfully added new workout.", Toast.LENGTH_LONG).show();
+                }
+                else
+                {
+                    Toast.makeText(NewWorkout.this, "You Need To Enter A New Workout Name", Toast.LENGTH_LONG).show();
+                }
+            }
+        });
+
 
         add=findViewById(R.id.new_workout_add_button);
         add.setOnClickListener(this);
@@ -109,6 +146,7 @@ public class NewWorkout extends AppCompatActivity implements View.OnClickListene
         r = new Numbers();
         temp = r.random(1000000) + 1;
         tempString = String.valueOf(temp);
+        actionsList.add(tempString);
 
         AddData(am.getAction(item.getItemId()), d, m, tempString);
         adapter.notifyDataSetChanged();
@@ -128,6 +166,9 @@ public class NewWorkout extends AppCompatActivity implements View.OnClickListene
             }break;
             case R.id.new_workout_delete:{
                 wop.removeWorkout(i);
+                String deleteThis = actionsList.get(i).toString();
+                Log.i("TEST DELETE", deleteThis);
+                myDB.deleteData(deleteThis);
             }break;
             case R.id.new_workout_add_action_button:{
                 openContextMenu(addActivity);

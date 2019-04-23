@@ -12,7 +12,8 @@ public class WorkoutAction {
         ARMS,
         LEGS,
         CORE,
-        BACK
+        BACK,
+        OTHER
     }
 
     private int id;
