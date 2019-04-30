@@ -4,7 +4,6 @@ import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
 import android.preference.PreferenceManager;
 import android.support.v4.app.FragmentManager;
@@ -13,12 +12,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
-import android.widget.CalendarView;
 import android.widget.ImageButton;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -28,9 +24,7 @@ import sun.bob.mcalendarview.MarkStyle;
 import sun.bob.mcalendarview.listeners.OnDateClickListener;
 import sun.bob.mcalendarview.listeners.OnMonthChangeListener;
 import sun.bob.mcalendarview.vo.DateData;
-import sun.bob.mcalendarview.vo.MarkedDates;
 
-import static banana.pudding.pie.train_n_gains.DatabaseHelper.TABLE_NAME;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -46,9 +40,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private SharedPreferences.Editor editor;
     private String dayValue;
     private String monthValue;
-    private String dValue;
-    private String mValue;
-    private String temp;
 
 
     @SuppressLint("WrongViewCast")
@@ -238,30 +229,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
 
-    private void test(){
-        Date current=Calendar.getInstance().getTime();
-        final MCalendarView cv=findViewById(R.id.CV);
 
-        cv.travelTo(new DateData(current.getYear()+1900,current.getMonth()+1,current.getDay()));
-
-        cv.setOnDateClickListener(new OnDateClickListener() {
-            @Override
-            public void onDateClick(View view, DateData date) {
-                if(!cv.getMarkedDates().remove(date))
-                    cv.markDate(date);
-            }
-        });
-
-        MarkStyle wo=new MarkStyle(MarkStyle.LEFTSIDEBAR,Color.GREEN);
-
-        ArrayList<DateData> dates=new ArrayList<>();
-        dates.add(new DateData(2019,4,26).setMarkStyle(wo));
-        dates.add(new DateData(2019,4,27).setMarkStyle(wo));
-
-        for(int i=0;i<dates.size();i++) {
-            cv.markDate(dates.get(i));
-        }
-    }
 
 
 

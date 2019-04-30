@@ -2,7 +2,6 @@ package banana.pudding.pie.train_n_gains;
 
 import android.media.Image;
 
-import org.json.JSONObject;
 
 public class WorkoutAction {
 
@@ -24,27 +23,11 @@ public class WorkoutAction {
 
     private Image image;
 
-    public WorkoutAction(){
+     WorkoutAction(){
         this(-1,"None","None","None",TYPE.CORE);
     }
-    public WorkoutAction(JSONObject obj){
-        try {
-            this.id=          obj.getInt("id");
-            this.name=        obj.getString("name");
-            this.description= obj.getString("desc");
-            this.instructions=obj.getString("inst");
-            this.type=        TYPE.valueOf(obj.getString("type"));
-        }catch (Exception e){
-            e.printStackTrace();
-            this.id=          -1;
-            this.name=        "None";
-            this.description= "None";
-            this.instructions="None";
-            this.type=        TYPE.CORE;
 
-        }
-    }
-    public WorkoutAction(int id,String name,String description,String instructions,TYPE type){
+     WorkoutAction(int id,String name,String description,String instructions,TYPE type){
         this.id=id;
         this.name=name;
         this.description=description;
@@ -52,17 +35,7 @@ public class WorkoutAction {
         this.type=type;
     }
 
-public JSONObject toJSON(){
-        JSONObject obj=new JSONObject();
-        try {
-            obj.put("id", id);
-            obj.put("name", name);
-            obj.put("desc", description);
-            obj.put("inst", instructions);
-            obj.put("type", type.name());
-        }catch (Exception e){e.printStackTrace();}
-        return obj;
-}
+
     public String getName() {
         return name;
     }
@@ -71,7 +44,7 @@ public JSONObject toJSON(){
         this.name = name;
     }
 
-    public String getDescription() {
+     String getDescription() {
         return description;
     }
 
@@ -79,7 +52,7 @@ public JSONObject toJSON(){
         this.description = description;
     }
 
-    public String getInstructions() {
+     String getInstructions() {
         return instructions;
     }
 
@@ -87,7 +60,7 @@ public JSONObject toJSON(){
         this.instructions = instructions;
     }
 
-    public TYPE getType() {
+     TYPE getType() {
         return type;
     }
 

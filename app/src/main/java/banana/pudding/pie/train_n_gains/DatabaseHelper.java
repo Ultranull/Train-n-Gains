@@ -9,20 +9,20 @@ import android.database.sqlite.SQLiteOpenHelper;
 public class DatabaseHelper extends SQLiteOpenHelper {
 
     public static final String DATABASE_PATH = "/data/data/banana.pudding.pie.train_n_gains/databases/";
-    public static final String DATABASE_NAME = "WORKOUTS";
-    public static final String TABLE_NAME = "B";
-    public static final String ID = "ID";
-    public static final String COL_NAME = "NAME";
-    public static final String COL_DESC = "DESCRIPTION";
-    public static final String COL_INST = "INSTRUCTION";
-    public static final String COL_TYPE = "TYPE";
-    public static final String COL_DAY = "DAY";
-    public static final String COL_MONTH = "MONTH";
-    public static final String COL_COMPLETED = "COMPLETED";
+    private static final String DATABASE_NAME = "WORKOUTS";
+    private static final String TABLE_NAME = "B";
+    private static final String ID = "ID";
+    private static final String COL_NAME = "NAME";
+    private static final String COL_DESC = "DESCRIPTION";
+    private static final String COL_INST = "INSTRUCTION";
+    private static final String COL_TYPE = "TYPE";
+    private static final String COL_DAY = "DAY";
+    private static final String COL_MONTH = "MONTH";
+    private static final String COL_COMPLETED = "COMPLETED";
 
 
 
-    public DatabaseHelper(Context context){super(context, DATABASE_NAME, null, 1);}
+     DatabaseHelper(Context context){super(context, DATABASE_NAME, null, 1);}
 
     @Override
     public void onCreate (SQLiteDatabase db) {
@@ -40,7 +40,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
 
 
-    public boolean addData(WorkoutAction woa, String day, String month, String completed) {
+     boolean addData(WorkoutAction woa, String day, String month, String completed) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
         //contentValues.put(ID, woa.getId());
@@ -54,13 +54,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
 
         long result = db.insert(TABLE_NAME, null, contentValues);
-        //return result!=-1;
-
-        if(result == -1) {
-            return false;
-        } else {
-            return true;
-        }
+        return result!=-1;
     }
 
     public void moveRowUp(int row){
@@ -70,12 +64,12 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.execSQL("UPDATE "+TABLE_NAME+" SET "+ID+" = m WHERE "+ID+" = n");
     }
 
-    public void clearTables(){
+     void clearTables(){
         SQLiteDatabase db = this.getReadableDatabase();
         db.execSQL("delete from B");
     }
 
-    public Cursor getListContents() {
+     Cursor getListContents() {
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor data = db.rawQuery("SELECT * FROM " + TABLE_NAME, null);
         return data;
@@ -83,7 +77,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
 
 
-    public void updateCompletion(String newCompletion, String oldCompletion) {
+     void updateCompletion(String newCompletion, String oldCompletion) {
         SQLiteDatabase db = this.getWritableDatabase();
 
         String query = "UPDATE " + TABLE_NAME + " SET " + COL_COMPLETED +
@@ -93,16 +87,12 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
 
-    public boolean deleteData(String data)
+     boolean deleteData(String data)
     {
         SQLiteDatabase db = this.getWritableDatabase();
         long result = db.delete(TABLE_NAME, "COMPLETED = ?", new String[] {data});
 
-        if(result == -1) {
-            return false;
-        } else {
-            return true;
-        }
+        return result!=-1;
 
     }
 
