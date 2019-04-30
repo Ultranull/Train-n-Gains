@@ -1,13 +1,10 @@
 package banana.pudding.pie.train_n_gains;
 
-import org.json.JSONArray;
-import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.LinkedHashMap;
 
-public class ActionManager {
+ class ActionManager {
 
     /*  database scheme
         id | name     | descr | ...
@@ -15,9 +12,9 @@ public class ActionManager {
      */
 
 
-    public LinkedHashMap<Integer,WorkoutAction> actions;
+     final LinkedHashMap<Integer,WorkoutAction> actions;
 
-    public ActionManager(){
+     ActionManager(){
         actions=new LinkedHashMap<>();
 
         actions.put(1,new WorkoutAction(1,"Push-Ups","A compound exercise to build upper body and core strength. Uses chest," +
@@ -51,34 +48,12 @@ public class ActionManager {
 
 
     }
-    public ArrayList<WorkoutAction> getActions(){
+     ArrayList<WorkoutAction> getActions(){
         return new ArrayList<>(actions.values());
     }
 
-    public WorkoutAction getAction(int id){
+     WorkoutAction getAction(int id){
         return actions.get(id);
-    }
-
-    public void load(String contents){
-        try {
-            JSONArray jsonArray = new JSONArray(contents);
-            for (int i=0;i<jsonArray.length();i++){
-                JSONObject obj=jsonArray.getJSONObject(i);
-                int id=obj.getInt("id");
-                actions.put(id,new WorkoutAction(obj));
-            }
-        }catch (Exception e){e.printStackTrace();}
-    }
-    public String save(){
-        JSONArray jsonArray = new JSONArray();
-        Iterator<WorkoutAction> iter=actions.values().iterator();
-        try {
-            while (iter.hasNext()){
-                JSONObject obj=iter.next().toJSON();
-                jsonArray.put(obj);
-            }
-        }catch (Exception e){e.printStackTrace();}
-        return jsonArray.toString();
     }
 
 

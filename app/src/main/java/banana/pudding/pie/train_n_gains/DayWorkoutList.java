@@ -1,6 +1,5 @@
 package banana.pudding.pie.train_n_gains;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -12,43 +11,25 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
-import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.CheckBox;
-import android.widget.CompoundButton;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import java.io.FileNotFoundException;
-import java.io.PrintWriter;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
+import java.util.Objects;
 
 import sun.bob.mcalendarview.vo.DateData;
 
 
 public class DayWorkoutList extends Fragment {
 
-    private WorkoutPlan wop;
-    private ListView workoutList;
-    private Adapter adapter;
-    private Button startWorkoutButton;
-    private DatabaseHelper myDB;
-    private String dValue;
-    private String mValue;
-    private String completedValue;
     private String dayValue;
     private String monthValue;
-    private SharedPreferences prefs;
-    private SharedPreferences.Editor editor;
     public DateData newDate;
 
     public DayWorkoutList() {
@@ -57,11 +38,10 @@ public class DayWorkoutList extends Fragment {
 
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_day_workout_list, container, false);
-        return view;
+        return inflater.inflate(R.layout.fragment_day_workout_list, container, false);
 
     }
 
@@ -70,15 +50,15 @@ public class DayWorkoutList extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState){
         super.onViewCreated(view, savedInstanceState);
 
-        myDB = new DatabaseHelper(getContext());
+        DatabaseHelper myDB = new DatabaseHelper(getContext());
         final Cursor data = myDB.getListContents();
         final ArrayList<String> theList = new ArrayList<>();
         final ArrayList<String> completionList = new ArrayList<>();
         dayValue = getArguments().getString("WorkoutDay");
-        monthValue = getArguments().getString("WorkoutMonth").toString();
+        monthValue = getArguments().getString("WorkoutMonth");
 
-        workoutList=view.findViewById(R.id.day_workout_list);
-        startWorkoutButton=view.findViewById(R.id.startWorkout);
+        ListView workoutList = view.findViewById(R.id.day_workout_list);
+        Button startWorkoutButton = view.findViewById(R.id.startWorkout);
         DateData today=WorkoutSchedule.today();
         if(today.getDay()<Integer.parseInt(dayValue)&&
                 today.getMonth()<=Integer.parseInt(monthValue))
@@ -88,20 +68,20 @@ public class DayWorkoutList extends Fragment {
         {
             while(data.moveToNext()){
 
-                dValue = data.getString(5);
-                mValue = data.getString(6);
-                completedValue = data.getString(7);
+                String dValue = data.getString(5);
+                String mValue = data.getString(6);
+                String completedValue = data.getString(7);
 
 
                 if(dValue.equals(dayValue) && mValue.equals(monthValue) ) {
                     try {
                         Integer.parseInt(completedValue);
                         theList.add(data.getString(1));
-                        adapter = new Adapter(getContext(), R.layout.plan_list_item, theList);
+                        Adapter adapter = new Adapter(Objects.requireNonNull(getContext()), R.layout.plan_list_item, theList);
                         workoutList.setAdapter(adapter);
 
                     }catch (Exception e){
-                        completionList.add(data.getString(1)+"~"+completedValue);
+                        completionList.add(data.getString(1)+"~"+ completedValue);
                     }
                 }
             }
@@ -115,8 +95,8 @@ public class DayWorkoutList extends Fragment {
         {
             FragmentManager fragmentManager = getFragmentManager();
             FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-            prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
-            editor = prefs.edit();
+            SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
+            SharedPreferences.Editor editor = prefs.edit();
 
             DayWorkoutEmpty dwe=new DayWorkoutEmpty();
             dwe.date=newDate;
@@ -127,7 +107,7 @@ public class DayWorkoutList extends Fragment {
             fragmentTransaction.replace(R.id.frameLayout, dwe);
             fragmentTransaction.commit();
         }
-        else if(theList.isEmpty() && !completionList.isEmpty())
+        else if(theList.isEmpty())
         {
 
             FragmentManager fragmentManager = getFragmentManager();
@@ -153,16 +133,12 @@ public class DayWorkoutList extends Fragment {
     }
 
 
-    public void setPlan(WorkoutPlan wp){
-        wop=wp;
-    }
-
     private class Adapter extends ArrayAdapter<String>{
 
         private final int resource;
-        private List<String> objects;
+        private final List<String> objects;
 
-        public Adapter(@NonNull Context context, int resource, @NonNull List<String> objects) {
+        Adapter(@NonNull Context context, int resource, @NonNull List<String> objects) {
             super(context, resource, objects);
             this.resource=resource;
             this.objects=objects;
@@ -178,7 +154,6 @@ public class DayWorkoutList extends Fragment {
                 convertView = LayoutInflater.from(getContext()).inflate(resource, parent, false);
                 holder=new Holder();
                 holder.title = convertView.findViewById(R.id.plan_list_workout_title);
-                holder.progress=convertView.findViewById(R.id.plan_list_workout_progress);
                 convertView.setTag(holder);
             }else{
                 holder=(Holder)convertView.getTag();
@@ -189,7 +164,7 @@ public class DayWorkoutList extends Fragment {
         }
 
         private class Holder {
-            public TextView title,progress;
+            TextView title;
         }
 
 

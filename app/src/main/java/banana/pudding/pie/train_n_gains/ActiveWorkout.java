@@ -1,96 +1,76 @@
 package banana.pudding.pie.train_n_gains;
 
-import android.content.Context;
-import android.content.Intent;
 import android.database.Cursor;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.SystemClock;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.view.ContextMenu;
-import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Chronometer;
-import android.widget.EditText;
-import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.jjoe64.graphview.GraphView;
-import com.jjoe64.graphview.series.DataPoint;
-import com.jjoe64.graphview.series.LineGraphSeries;
 
 import org.joml.Vector3f;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 
 public class ActiveWorkout extends AppCompatActivity  implements SensorEventListener, View.OnClickListener {
 
     private SensorManager sensorManager;
     private TextView workoutName, instructions, description,repsview, setsview;
-    private Button completeWorkout,calibrate;
-    private String day, month, ins, des, dValue, mValue;
     private int itr = 0, size=1;
-    private WorkoutPlan currentPlan;
     private DatabaseHelper myDB;
-    private Cursor data;
 
     private Chronometer chronometer;
     private boolean running;
 
 
-    ArrayList<String> nameList = new ArrayList<>();
-    ArrayList<String> descriptionList = new ArrayList<>();
-    ArrayList<String> instructionsList = new ArrayList<>();
-    ArrayList<String> typeList = new ArrayList<>();
-    ArrayList<String> completionList = new ArrayList<>();
+    private final ArrayList<String> nameList = new ArrayList<>();
+    private final ArrayList<String> descriptionList = new ArrayList<>();
+    private final ArrayList<String> instructionsList = new ArrayList<>();
+    private final ArrayList<String> typeList = new ArrayList<>();
+    private final ArrayList<String> completionList = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         try {
-            this.getSupportActionBar().hide();
+            Objects.requireNonNull(this.getSupportActionBar()).hide();
         } catch (Exception e) {
             e.printStackTrace();
         }
         setContentView(R.layout.active_workout);
 
         myDB = new DatabaseHelper(this);
-        data = myDB.getListContents();
+        Cursor data = myDB.getListContents();
 
 
 
         //Get the Day and Month for the started workout list.
-        day = getIntent().getExtras().getString("DV");
-        month = getIntent().getExtras().getString("MV");
+        String day = Objects.requireNonNull(getIntent().getExtras()).getString("DV");
+        String month = getIntent().getExtras().getString("MV");
 
         workoutName = findViewById(R.id.action_title);
         instructions=findViewById(R.id.action_instructions);
         description=findViewById(R.id.action_description);
         repsview=findViewById(R.id.number_of_reps);
         setsview=findViewById(R.id.number_of_sets);
-        completeWorkout = findViewById(R.id.completed_button);
-        calibrate=findViewById(R.id.calibrate_button);
+        Button completeWorkout = findViewById(R.id.completed_button);
+        Button calibrate = findViewById(R.id.calibrate_button);
         chronometer=findViewById(R.id.chronometer);
 
 
         {
             while(data.moveToNext()){
 
-                dValue = data.getString(5);
-                mValue = data.getString(6);
+                String dValue = data.getString(5);
+                String mValue = data.getString(6);
 
                 if(dValue.equals(day) && mValue.equals(month))
                 {
@@ -123,7 +103,7 @@ public class ActiveWorkout extends AppCompatActivity  implements SensorEventList
 
         sensorManager=(SensorManager) getSystemService(SENSOR_SERVICE);
         sensorManager.registerListener(this,
-                sensorManager.getDefaultSensor(Sensor.TYPE_LINEAR_ACCELERATION),sensorManager.SENSOR_DELAY_FASTEST);
+                Objects.requireNonNull(sensorManager).getDefaultSensor(Sensor.TYPE_LINEAR_ACCELERATION), SensorManager.SENSOR_DELAY_FASTEST);
 
 
     }
@@ -184,7 +164,7 @@ public class ActiveWorkout extends AppCompatActivity  implements SensorEventList
     protected void onResume() {
         super.onResume();
         sensorManager.registerListener(this,
-                sensorManager.getDefaultSensor(Sensor.TYPE_LINEAR_ACCELERATION),sensorManager.SENSOR_DELAY_FASTEST);
+                sensorManager.getDefaultSensor(Sensor.TYPE_LINEAR_ACCELERATION), SensorManager.SENSOR_DELAY_FASTEST);
         System.out.println("sensor resumed");
     }
 
@@ -219,10 +199,8 @@ public class ActiveWorkout extends AppCompatActivity  implements SensorEventList
                 index++;
             }
             double avg=0;
-            DataPoint[] data=new DataPoint[hist.length];
-            for(int i=0;i<hist.length;i++) {
-                data[i]=new DataPoint(i,Math.round(hist[i]));
-                avg+=Math.round(hist[i]);
+            for (double v : hist) {
+                avg += Math.round(v);
             }
             if(Math.abs(avg)>=10&&!repping)
                 repping=true;

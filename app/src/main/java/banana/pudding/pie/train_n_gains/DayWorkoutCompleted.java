@@ -1,24 +1,22 @@
 package banana.pudding.pie.train_n_gains;
 
 
+import android.annotation.SuppressLint;
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Adapter;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
+import java.util.Objects;
 
 
 /**
@@ -26,17 +24,6 @@ import java.util.Set;
  */
 public class DayWorkoutCompleted extends Fragment {
 
-    private ListView workoutList;
-    private Adapter adapter;
-    private DatabaseHelper myDB;
-    private String dValue;
-    private String mValue;
-    private String dayValue;
-    private String monthValue;
-
-
-    private SharedPreferences prefs;
-    private SharedPreferences.Editor editor;
 
     private ArrayList<String> list;
 
@@ -46,7 +33,7 @@ public class DayWorkoutCompleted extends Fragment {
 
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_day_workout_completed, container, false);
@@ -56,9 +43,9 @@ public class DayWorkoutCompleted extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        workoutList=view.findViewById(R.id.list);
+        ListView workoutList = view.findViewById(R.id.list);
 
-        adapter=new Adapter(getContext(),R.layout.plan_list_item,new ArrayList<String>(list));
+        Adapter adapter = new Adapter(Objects.requireNonNull(getContext()), R.layout.plan_list_item, new ArrayList<>(list));
         workoutList.setAdapter(adapter);
 
     }
@@ -69,15 +56,16 @@ public class DayWorkoutCompleted extends Fragment {
     private class Adapter extends ArrayAdapter<String> {
 
         private final int resource;
-        private List<String> objects;
+        private final List<String> objects;
 
-        public Adapter(@NonNull Context context, int resource, @NonNull List<String> objects) {
+         Adapter(@NonNull Context context, int resource, @NonNull List<String> objects) {
             super(context, resource, objects);
             this.resource = resource;
             this.objects = objects;
         }
 
 
+        @SuppressLint("SetTextI18n")
         @NonNull
         @Override
         public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
@@ -99,7 +87,7 @@ public class DayWorkoutCompleted extends Fragment {
         }
 
         private class Holder {
-            public TextView title, progress;
+             TextView title, progress;
         }
     }
 }

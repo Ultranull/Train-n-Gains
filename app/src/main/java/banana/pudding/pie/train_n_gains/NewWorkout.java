@@ -3,7 +3,6 @@ package banana.pudding.pie.train_n_gains;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.database.Cursor;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -30,36 +29,30 @@ import sun.bob.mcalendarview.vo.DateData;
 
 public class NewWorkout extends AppCompatActivity implements View.OnClickListener {
 
-    private Button add,addActivity;
-    private ListView activities;
+    private Button addActivity;
     private Adapter adapter;
     private EditText newName;
     private EditText newDesc;
     private EditText newIns;
-    private Button create;
 
     private WorkoutPlan wop;
     private DateData day;
     private DatabaseHelper myDB;
-    private SharedPreferences prefs;
     private String d;
     private String m;
 
-    private Numbers r;
-    private int temp, itr=0;
-    private String tempString;
 
-    final ArrayList<String> actionsList = new ArrayList<>();
+    private final ArrayList<String> actionsList = new ArrayList<>();
 
 
-    public class Numbers {
-        Random randnum;
+    class Numbers {
+        final Random randnum;
 
-        public Numbers() {
+        Numbers() {
             randnum = new Random();
         }
 
-        public int random(int i){
+        int random(int i){
             return randnum.nextInt(i);
         }
     }
@@ -81,7 +74,7 @@ public class NewWorkout extends AppCompatActivity implements View.OnClickListene
         newName=findViewById(R.id.newName);
         newDesc=findViewById(R.id.newDesc);
         newIns=findViewById(R.id.newIns);
-        create=findViewById(R.id.create);
+        Button create = findViewById(R.id.create);
         create.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -108,7 +101,7 @@ public class NewWorkout extends AppCompatActivity implements View.OnClickListene
         });
 
 
-        add=findViewById(R.id.new_workout_add_button);
+        Button add = findViewById(R.id.new_workout_add_button);
         add.setOnClickListener(this);
         addActivity=findViewById(R.id.new_workout_add_action_button);
         addActivity.setOnClickListener(this);
@@ -116,12 +109,12 @@ public class NewWorkout extends AppCompatActivity implements View.OnClickListene
 
         addActivity=findViewById(R.id.new_workout_add_action_button);
 
-        activities=findViewById(R.id.workout_action_list);
+        ListView activities = findViewById(R.id.workout_action_list);
         wop=new WorkoutPlan();
         adapter=new Adapter(this,R.layout.new_workout_actions_list_item,wop.getWorkouts(),this);
         activities.setAdapter(adapter);
 
-        prefs = PreferenceManager.getDefaultSharedPreferences(this);
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
         d = prefs.getString("wDay", day.getDayString());
         m = prefs.getString("wMonth", day.getMonthString());
 
@@ -143,9 +136,9 @@ public class NewWorkout extends AppCompatActivity implements View.OnClickListene
         ActionManager am=WorkoutSchedule.getInstance().actionManager;
         wop.addWorkout(am.getAction(item.getItemId()));
 
-        r = new Numbers();
-        temp = r.random(1000000) + 1;
-        tempString = String.valueOf(temp);
+        Numbers r = new Numbers();
+        int temp = r.random(1000000) + 1;
+        String tempString = String.valueOf(temp);
         actionsList.add(tempString);
 
         AddData(am.getAction(item.getItemId()), d, m, tempString);
@@ -166,7 +159,7 @@ public class NewWorkout extends AppCompatActivity implements View.OnClickListene
             }break;
             case R.id.new_workout_delete:{
                 wop.removeWorkout(i);
-                String deleteThis = actionsList.get(i).toString();
+                String deleteThis = actionsList.get(i);
                 Log.i("TEST DELETE", deleteThis);
                 myDB.deleteData(deleteThis);
             }break;
@@ -185,10 +178,10 @@ public class NewWorkout extends AppCompatActivity implements View.OnClickListene
     private class Adapter extends ArrayAdapter<WorkoutAction> {
 
         private final int resource;
-        private List<WorkoutAction> objects;
-        private View.OnClickListener listener;
+        private final List<WorkoutAction> objects;
+        private final View.OnClickListener listener;
 
-        public Adapter(@NonNull Context context, int resource, @NonNull List<WorkoutAction> objects,View.OnClickListener l) {
+        Adapter(@NonNull Context context, int resource, @NonNull List<WorkoutAction> objects, View.OnClickListener l) {
             super(context, resource, objects);
             this.resource=resource;
             this.objects=objects;
@@ -222,17 +215,19 @@ public class NewWorkout extends AppCompatActivity implements View.OnClickListene
         }
 
         private class Holder {
-            public TextView title;
-            public Button up,down,delete;
+            TextView title;
+            Button up;
+            Button down;
+            Button delete;
         }
     }
 
 
-    public void AddData(WorkoutAction a, String day, String month, String completed)
+    private void AddData(WorkoutAction a, String day, String month, String completed)
     {
         boolean insertData = myDB.addData(a, day, month, completed);
 
-        if(insertData ==true){
+        if(insertData){
             Toast.makeText(this, "Successfully Entered Workout Information!", Toast.LENGTH_LONG).show();
         }
         else{

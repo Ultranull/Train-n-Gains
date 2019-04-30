@@ -21,15 +21,7 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="banana.pudding.pie.train_n_gains.MainActivity" />
         </activity>
-        <activity
-            android:name=".SettingsActivity"
-            android:label="@string/title_activity_settings"
-            android:parentActivityName=".MainActivity">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="banana.pudding.pie.train_n_gains.MainActivity" />
-        </activity>
-        <activity android:name=".Congradulations" />
+
         <activity android:name=".NewWorkout"
             android:windowSoftInputMode="adjustNothing"/>
         <activity android:name=".ActiveWorkout" />
