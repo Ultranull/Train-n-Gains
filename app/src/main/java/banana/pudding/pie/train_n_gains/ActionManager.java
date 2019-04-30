@@ -12,7 +12,7 @@ import java.util.LinkedHashMap;
      */
 
 
-     LinkedHashMap<Integer,WorkoutAction> actions;
+     final LinkedHashMap<Integer,WorkoutAction> actions;
 
      ActionManager(){
         actions=new LinkedHashMap<>();

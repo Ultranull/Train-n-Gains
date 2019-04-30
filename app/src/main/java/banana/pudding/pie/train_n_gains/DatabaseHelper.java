@@ -6,9 +6,9 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
-public class DatabaseHelper extends SQLiteOpenHelper {
+class DatabaseHelper extends SQLiteOpenHelper {
 
-    public static final String DATABASE_PATH = "/data/data/banana.pudding.pie.train_n_gains/databases/";
+    // --Commented out by Inspection (4/30/2019 4:40 PM):public static final String DATABASE_PATH = "/data/data/banana.pudding.pie.train_n_gains/databases/";
     private static final String DATABASE_NAME = "WORKOUTS";
     private static final String TABLE_NAME = "B";
     private static final String ID = "ID";
@@ -57,12 +57,14 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return result!=-1;
     }
 
-    public void moveRowUp(int row){
-        int n=row,m=row-1;
-        SQLiteDatabase db = this.getReadableDatabase();
-        db.execSQL("UPDATE "+TABLE_NAME+" SET "+ID+" = "+ID+"-1 WHERE "+ID+" > "+m+" AND "+ID+" <= "+n);
-        db.execSQL("UPDATE "+TABLE_NAME+" SET "+ID+" = m WHERE "+ID+" = n");
-    }
+// --Commented out by Inspection START (4/30/2019 4:40 PM):
+//    public void moveRowUp(int row){
+//        int n=row,m=row-1;
+//        SQLiteDatabase db = this.getReadableDatabase();
+//        db.execSQL("UPDATE "+TABLE_NAME+" SET "+ID+" = "+ID+"-1 WHERE "+ID+" > "+m+" AND "+ID+" <= "+n);
+//        db.execSQL("UPDATE "+TABLE_NAME+" SET "+ID+" = m WHERE "+ID+" = n");
+//    }
+// --Commented out by Inspection STOP (4/30/2019 4:40 PM)
 
      void clearTables(){
         SQLiteDatabase db = this.getReadableDatabase();

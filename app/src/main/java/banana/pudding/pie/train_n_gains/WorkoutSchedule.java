@@ -35,27 +35,14 @@ import sun.bob.mcalendarview.vo.DateData;
 
 
 
-     ArrayList<DateData> dates;
-     ArrayList<WorkoutPlan> plans;
-     ActionManager actionManager;
+     final ArrayList<DateData> dates;
+     private final ArrayList<WorkoutPlan> plans;
+     final ActionManager actionManager;
 
     private WorkoutSchedule(){
         dates=new ArrayList<>();
         plans=new ArrayList<>();
         actionManager=new ActionManager();
-    }
-
-
-
-    private DateData fromString(String date){
-        int year,month,day;
-
-        String[] data=date.split("/");
-        year=Integer.parseInt(data[0]);
-        month=Integer.parseInt(data[1]);
-        day=Integer.parseInt(data[2]);
-
-        return new DateData(year,month,day);
     }
 
 

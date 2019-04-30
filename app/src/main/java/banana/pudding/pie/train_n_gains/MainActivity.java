@@ -16,8 +16,6 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
 
 import sun.bob.mcalendarview.MCalendarView;
 import sun.bob.mcalendarview.MarkStyle;
@@ -30,16 +28,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private MCalendarView calender;
     private TextView datetitle,monthtitle;
-    private Button totoday;
-    private ImageButton settingb;
     private MarkStyle selected, planned;
     private DateData lastday;
     private DatabaseHelper myDB;
     private Cursor data;
-    private SharedPreferences prefs;
     private SharedPreferences.Editor editor;
-    private String dayValue;
-    private String monthValue;
 
 
     @SuppressLint("WrongViewCast")
@@ -80,9 +73,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         calender.setOnDateClickListener(new DayListener());
         //calender.hasTitle(false);
 
-        totoday=findViewById(R.id.move_to_today);
+        Button totoday = findViewById(R.id.move_to_today);
         totoday.setOnClickListener(this);
-        settingb=findViewById(R.id.settings);
+        ImageButton settingb = findViewById(R.id.settings);
         settingb.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -101,7 +94,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         WorkoutPlan fortoday=wos.getAt(today);
         if(fortoday!=null) {
             DayWorkoutList dwl=new DayWorkoutList();
-            dwl.setPlan(fortoday);
 
             Bundle bundle = new Bundle();
             bundle.putString("WorkoutDay", "");
@@ -125,7 +117,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             calender.markDate(d.setMarkStyle(planned));
 
 
-        prefs = PreferenceManager.getDefaultSharedPreferences(this);
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
         editor = prefs.edit();
     }
 
@@ -160,13 +152,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             WorkoutSchedule wos=WorkoutSchedule.getInstance();
             WorkoutPlan fortoday=wos.getAt(date);
 
-            dayValue = date.getDayString();
-            monthValue = date.getMonthString();
+            String dayValue = date.getDayString();
+            String monthValue = date.getMonthString();
 
 
             if(fortoday!=null || data.getCount() != 0) {
                 DayWorkoutList dwl=new DayWorkoutList();
-                dwl.setPlan(fortoday);
                 dwl.newDate=date;
 
                 Bundle bundle = new Bundle();
@@ -201,7 +192,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         if(fortoday!=null || data.getCount() != 0) {
             DayWorkoutList dwl=new DayWorkoutList();
-            dwl.setPlan(fortoday);
 
             Bundle bundle = new Bundle();
             bundle.putString("WorkoutDay", lastday.getDayString());

@@ -3,18 +3,16 @@ package banana.pudding.pie.train_n_gains;
 
 import java.util.ArrayList;
 
-public class WorkoutPlan {
+class WorkoutPlan {
     private String name;
-    private String description;
 
-    private ArrayList<WorkoutAction> workouts;
+    private final ArrayList<WorkoutAction> workouts;
 
      WorkoutPlan(){
-        this("None","None");
+        this("None");
     }
-    private WorkoutPlan(String name,String description){
+    private WorkoutPlan(String name){
         this.name=name;
-        this.description=description;
         workouts=new ArrayList<>();
     }
 
@@ -52,11 +50,4 @@ public class WorkoutPlan {
         this.name = name;
     }
 
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
 }

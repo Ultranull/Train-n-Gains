@@ -3,7 +3,6 @@ package banana.pudding.pie.train_n_gains;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -25,17 +24,6 @@ import java.util.Objects;
  */
 public class DayWorkoutCompleted extends Fragment {
 
-    private ListView workoutList;
-    private Adapter adapter;
-    private DatabaseHelper myDB;
-    private String dValue;
-    private String mValue;
-    private String dayValue;
-    private String monthValue;
-
-
-    private SharedPreferences prefs;
-    private SharedPreferences.Editor editor;
 
     private ArrayList<String> list;
 
@@ -55,9 +43,9 @@ public class DayWorkoutCompleted extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        workoutList=view.findViewById(R.id.list);
+        ListView workoutList = view.findViewById(R.id.list);
 
-        adapter=new Adapter(Objects.requireNonNull(getContext()),R.layout.plan_list_item,new ArrayList<String>(list));
+        Adapter adapter = new Adapter(Objects.requireNonNull(getContext()), R.layout.plan_list_item, new ArrayList<>(list));
         workoutList.setAdapter(adapter);
 
     }
@@ -68,7 +56,7 @@ public class DayWorkoutCompleted extends Fragment {
     private class Adapter extends ArrayAdapter<String> {
 
         private final int resource;
-        private List<String> objects;
+        private final List<String> objects;
 
          Adapter(@NonNull Context context, int resource, @NonNull List<String> objects) {
             super(context, resource, objects);
