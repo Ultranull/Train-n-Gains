@@ -12,9 +12,4 @@
         android:icon="@drawable/ic_notifications_black_24dp"
         android:title="@string/pref_header_notifications" />
 
-    <header
-        android:fragment="banana.pudding.pie.train_n_gains.Settings$StatsPreferenceFragment"
-        android:icon="@drawable/ic_sync_black_24dp"
-        android:title="@string/pref_header_Stats" />
-
 </preference-headers>
