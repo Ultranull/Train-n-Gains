@@ -1,7 +1,8 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
-
-
-    <ListPreference
-        android:title="Work In Progress" />
-
+    <EditTextPreference
+        android:defaultValue="true"
+        android:key="edit_text_preference_1"
+        android:selectAllOnFocus="true"
+        android:singleLine="true"
+        android:title="To be developed" />
 </PreferenceScreen>

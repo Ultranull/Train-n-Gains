@@ -30,11 +30,9 @@
         <item>-1</item>
     </string-array>
 
-    <!-- Example settings for Data & Sync -->
-    <string name="pref_header_data_sync">Data &amp; sync</string>
 
-    <string name="pref_title_sync_frequency">Sync frequency</string>
-    <string-array name="pref_sync_frequency_titles">
+    <string name="pref_title_notification_frequency">Sync frequency</string>
+    <string-array name="pref_notifications_frequency_titles">
         <item>15 minutes</item>
         <item>30 minutes</item>
         <item>1 hour</item>
@@ -42,7 +40,7 @@
         <item>6 hours</item>
         <item>Never</item>
     </string-array>
-    <string-array name="pref_sync_frequency_values">
+    <string-array name="pref_notification_frequency_values">
         <item>15</item>
         <item>30</item>
         <item>60</item>
@@ -65,18 +63,25 @@
 
     <string-array name="multi_select_list_preference_default_value" />
 
-    <string name="pref_title_system_sync_settings">System sync settings</string>
-
     <!-- Example settings for Notifications -->
     <string name="pref_header_notifications">Notifications</string>
 
     <string name="pref_title_new_message_notifications">New message notifications</string>
+    <string name="pref_title_remind_me_in">Sync frequency</string>
+    <string-array name="pref_sync_reminder">
+        <item>1 day</item>
+        <item>2 days</item>
+        <item>3 days</item>
+        <item>4 day</item>
+        <item>5 days</item>
+        <item>6 days</item>
+        <item>1 week</item>
+
+
+    </string-array>
 
     <string name="pref_title_ringtone">Ringtone</string>
     <string name="pref_ringtone_silent">Silent</string>
-
     <string name="pref_title_vibrate">Vibrate</string>
-    <string name="pref_header_stats">stats</string>
-    <string name="pref_header_Stats">Stats</string>
     <string name="pref_title_work_in_progress">wip</string>
 </resources>

@@ -1,8 +1,25 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
-
-    <!-- A 'parent' preference, which enables/disables child preferences (below)
-         when checked/unchecked. -->
+    <SwitchPreference
+        android:defaultValue="false"
+        android:key="switch_preference_1"
+        android:title="@string/pref_title_vibrate" />
     <ListPreference
-        android:title="Work In Progress" />
-
+        android:defaultValue="true"
+        android:entries="@array/list_preference_entries"
+        android:entryValues="@string/pref_title_remind_me_in"
+        android:key="list_preference_1"
+        android:title="Remind me in: " />
+    <RingtonePreference
+        android:defaultValue=""
+        android:key="ringtone_preference_1"
+        android:title="Notification Ringtone" />
+    <SwitchPreference
+        android:defaultValue="false"
+        android:key="switch_preference_2"
+        android:title="Notifications for updates" />
+    <SwitchPreference
+        android:defaultValue="false"
+        android:key="switch_preference_3"
+        android:title="Hide Notifications" />
 </PreferenceScreen>
+
