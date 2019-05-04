@@ -1,4 +1,5 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+<<<<<<< HEAD
     <EditTextPreference
         android:defaultValue="true"
         android:key="edit_text_preference_1"
@@ -37,4 +38,11 @@
         android:title="@string/pref_title_add_friends_to_messages" />
 
 >>>>>>> parent of 19af271... made settings show WIP
+=======
+
+
+    <ListPreference
+        android:title="Work In Progress" />
+
+>>>>>>> parent of 9371606... Summary(updated though not implemented)
 </PreferenceScreen>
